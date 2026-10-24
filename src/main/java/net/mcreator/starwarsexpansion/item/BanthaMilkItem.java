@@ -13,7 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class BanthaMilkItem extends Item {
 	public BanthaMilkItem() {
-		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(10).saturationMod(0.6f).alwaysEat().build()));
+		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(10).saturationModifier(0.6f).alwaysEdible().build()));
 	}
 
 	@Override

@@ -1,0 +1,24 @@
+# Build artifacts
+build/
+out/
+
+# Gradle
+.gradle/
+
+# Runtime workspaces
+run/
+.libs/
+
+# Logs and IDE junk
+*.log
+logs/
+.idea/
+.vscode/
+.classpath
+.project
+.settings/
+bin/
+
+# Teardown / analysis dumps
+*.out
+reports/

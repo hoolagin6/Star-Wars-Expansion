@@ -1,11 +1,12 @@
 
 package net.mcreator.starwarsexpansion.block;
 
-import org.checkerframework.checker.units.qual.s;
 
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.level.storage.loot.LootParams;
+import com.mojang.serialization.MapCodec;
+
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -102,4 +103,9 @@ public class KoltoTankBlock extends BaseEntityBlock implements EntityBlock {
 			return dropsOriginal;
 		return Collections.singletonList(new ItemStack(Blocks.AIR));
 	}
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return simpleCodec(p -> new KoltoTankBlock());
+	}
+
 }

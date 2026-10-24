@@ -1,10 +1,11 @@
 
 package net.mcreator.starwarsexpansion.block;
 
-import org.checkerframework.checker.units.qual.s;
 
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import com.mojang.serialization.MapCodec;
+
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.BlockState;
@@ -68,4 +69,9 @@ public class HolocronBlock extends BaseEntityBlock implements EntityBlock {
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		return this.defaultBlockState();
 	}
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return simpleCodec(p -> new HolocronBlock());
+	}
+
 }

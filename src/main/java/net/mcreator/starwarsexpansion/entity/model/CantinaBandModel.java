@@ -9,17 +9,17 @@ import net.mcreator.starwarsexpansion.entity.CantinaBandEntity;
 public class CantinaBandModel extends GeoModel<CantinaBandEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(CantinaBandEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "animations/cantinaband.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "animations/cantinaband.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(CantinaBandEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "geo/cantinaband.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "geo/cantinaband.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(CantinaBandEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "textures/entities/" + entity.getTexture() + ".png");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion",  "textures/entities/" + entity.getTexture() + ".png");
 	}
 
 }

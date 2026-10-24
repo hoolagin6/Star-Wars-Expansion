@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "star_wars_expansion:endor_forest",
-  "features": "star_wars_expansion:hardened_mud",
-  "step": "underground_ores"
-}

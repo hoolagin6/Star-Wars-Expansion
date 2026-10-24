@@ -1,8 +1,9 @@
 package net.mcreator.starwarsexpansion.init;
 
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 import net.mcreator.starwarsexpansion.entity.XWingEntity;
 import net.mcreator.starwarsexpansion.entity.WampaEntity;
@@ -53,10 +54,10 @@ import net.mcreator.starwarsexpansion.entity.ArgesFrogEntity;
 import net.mcreator.starwarsexpansion.entity.AncientSithLordEntity;
 import net.mcreator.starwarsexpansion.entity.ATSTEntity;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class EntityAnimationFactory {
 	@SubscribeEvent
-	public static void onEntityTick(LivingEvent.LivingTickEvent event) {
+	public static void onEntityTick(EntityTickEvent.Post event) {
 		if (event != null && event.getEntity() != null) {
 			if (event.getEntity() instanceof AstromechDroidBlueEntity syncable) {
 				String animation = syncable.getSyncedAnimation();

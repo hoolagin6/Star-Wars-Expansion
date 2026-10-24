@@ -10,10 +10,9 @@ public class SpaceshipMoveKeyOnKeyPressedProcedure {
 			return;
 		{
 			boolean _setval = true;
-			entity.getCapability(StarWarsExpansionModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-				capability.ssmov = _setval;
-				capability.syncPlayerVariables(entity);
-			});
+			StarWarsExpansionModVariables.getPlayerVariables(entity).ssmov = _setval;
+				StarWarsExpansionModVariables.getPlayerVariables(entity).syncPlayerVariables(entity);
+				StarWarsExpansionModVariables.storePlayerVariables(entity, StarWarsExpansionModVariables.getPlayerVariables(entity));
 		}
 	}
 }

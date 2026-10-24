@@ -16,8 +16,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 public class LaserProjectileRenderer extends EntityRenderer<LaserProjectileEntity> {
-	private static final ResourceLocation texture = new ResourceLocation("star_wars_expansion:textures/entities/laser_projectile.png");
-	private static final ResourceLocation emissiveTexture = new ResourceLocation("star_wars_expansion:textures/entities/laser_projectile_emissive.png");
+	private static final ResourceLocation texture = ResourceLocation.parse("star_wars_expansion:textures/entities/laser_projectile.png");
+	private static final ResourceLocation emissiveTexture = ResourceLocation.parse("star_wars_expansion:textures/entities/laser_projectile_emissive.png");
 	private final Modellaser model;
 
 	public LaserProjectileRenderer(EntityRendererProvider.Context context) {
@@ -31,7 +31,7 @@ public class LaserProjectileRenderer extends EntityRenderer<LaserProjectileEntit
 		poseStack.pushPose();
 		poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) - 90));
 		poseStack.mulPose(Axis.ZP.rotationDegrees(90 + Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot())));
-		model.renderToBuffer(poseStack, vb, packedLightIn, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+		model.renderToBuffer(poseStack, vb, packedLightIn, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 		poseStack.popPose();
 
 		// Render emisivo sin afectar la luz del mundo
@@ -39,7 +39,7 @@ public class LaserProjectileRenderer extends EntityRenderer<LaserProjectileEntit
 		poseStack.mulPose(Axis.YP.rotationDegrees(Mth.lerp(partialTicks, entityIn.yRotO, entityIn.getYRot()) - 90));
 		poseStack.mulPose(Axis.ZP.rotationDegrees(90 + Mth.lerp(partialTicks, entityIn.xRotO, entityIn.getXRot())));
 		VertexConsumer emissiveVb = bufferIn.getBuffer(RenderType.eyes(emissiveTexture));
-		model.renderToBuffer(poseStack, emissiveVb, 0xF000F0, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+		model.renderToBuffer(poseStack, emissiveVb, 0xF000F0, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 		poseStack.popPose();
 
 		super.render(entityIn, entityYaw, partialTicks, poseStack, bufferIn, packedLightIn);

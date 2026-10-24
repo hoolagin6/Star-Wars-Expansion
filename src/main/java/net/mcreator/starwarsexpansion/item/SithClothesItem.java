@@ -1,28 +1,25 @@
 
 package net.mcreator.starwarsexpansion.item;
 
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
 
 import net.minecraft.world.level.Level;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.Minecraft;
 
 import net.mcreator.starwarsexpansion.procedures.JediClothesFallProcedureProcedure;
+import net.mcreator.starwarsexpansion.init.StarWarsExpansionModArmorMaterials;
 import net.mcreator.starwarsexpansion.client.model.Modeljediclothes;
 
 import java.util.function.Consumer;
@@ -33,47 +30,7 @@ import com.google.common.collect.Iterables;
 
 public abstract class SithClothesItem extends ArmorItem {
 	public SithClothesItem(ArmorItem.Type type, Item.Properties properties) {
-		super(new ArmorMaterial() {
-			@Override
-			public int getDurabilityForType(ArmorItem.Type type) {
-				return new int[]{13, 15, 16, 11}[type.getSlot().getIndex()] * 0;
-			}
-
-			@Override
-			public int getDefenseForType(ArmorItem.Type type) {
-				return new int[]{0, 0, 6, 0}[type.getSlot().getIndex()];
-			}
-
-			@Override
-			public int getEnchantmentValue() {
-				return 9;
-			}
-
-			@Override
-			public SoundEvent getEquipSound() {
-				return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.armor.equip_leather"));
-			}
-
-			@Override
-			public Ingredient getRepairIngredient() {
-				return Ingredient.of();
-			}
-
-			@Override
-			public String getName() {
-				return "sith_clothes";
-			}
-
-			@Override
-			public float getToughness() {
-				return 0f;
-			}
-
-			@Override
-			public float getKnockbackResistance() {
-				return 0f;
-			}
-		}, type, properties);
+		super(StarWarsExpansionModArmorMaterials.get("sith_clothes", 0, 0, 6, 0, 9, "item.armor.equip_leather", 0f, 0f, "sith_clothes"), type, properties.durability(0));
 	}
 
 	public static class Chestplate extends SithClothesItem {
@@ -87,10 +44,10 @@ public abstract class SithClothesItem extends ArmorItem {
 				@Override
 				@OnlyIn(Dist.CLIENT)
 				public HumanoidModel getHumanoidArmorModel(LivingEntity living, ItemStack stack, EquipmentSlot slot, HumanoidModel defaultModel) {
-					HumanoidModel armorModel = new HumanoidModel(new ModelPart(Collections.emptyList(), Map.of("body", new Modeljediclothes(Minecraft.getInstance().getEntityModels().bakeLayer(Modeljediclothes.LAYER_LOCATION)).body, "left_arm",
+					HumanoidModel armorModel = new HumanoidModel<>(new ModelPart(Collections.emptyList(), Map.of("body", new Modeljediclothes(Minecraft.getInstance().getEntityModels().bakeLayer(Modeljediclothes.LAYER_LOCATION)).body, "left_arm",
 							new Modeljediclothes(Minecraft.getInstance().getEntityModels().bakeLayer(Modeljediclothes.LAYER_LOCATION)).rightArm, "right_arm",
 							new Modeljediclothes(Minecraft.getInstance().getEntityModels().bakeLayer(Modeljediclothes.LAYER_LOCATION)).leftArm, "head", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "hat",
-							new ModelPart(Collections.emptyList(), Collections.emptyMap()), "right_leg", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "left_leg", new ModelPart(Collections.emptyList(), Collections.emptyMap()))));
+							new ModelPart(Collections.emptyList(), Collections.emptyMap()), "right_leg", new ModelPart(Collections.emptyList(), Collections.emptyMap()), "left_leg", new ModelPart(Collections.emptyList(), Collections.emptyMap()))), location -> RenderType.entityTranslucent(location));
 					armorModel.crouching = living.isShiftKeyDown();
 					armorModel.riding = defaultModel.riding;
 					armorModel.young = living.isBaby();
@@ -99,10 +56,6 @@ public abstract class SithClothesItem extends ArmorItem {
 			});
 		}
 
-		@Override
-		public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-			return "star_wars_expansion:textures/entities/sith_clothes.png";
-		}
 
 		@Override
 		public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {

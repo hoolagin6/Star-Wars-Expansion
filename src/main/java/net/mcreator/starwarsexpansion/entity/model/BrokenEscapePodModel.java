@@ -9,17 +9,17 @@ import net.mcreator.starwarsexpansion.entity.BrokenEscapePodEntity;
 public class BrokenEscapePodModel extends GeoModel<BrokenEscapePodEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(BrokenEscapePodEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "animations/pod.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "animations/pod.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(BrokenEscapePodEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "geo/pod.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "geo/pod.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(BrokenEscapePodEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "textures/entities/" + entity.getTexture() + ".png");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion",  "textures/entities/" + entity.getTexture() + ".png");
 	}
 
 }

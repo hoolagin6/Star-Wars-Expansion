@@ -1,6 +1,7 @@
 
 package net.mcreator.starwarsexpansion.item;
 
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.ItemStack;
@@ -15,7 +16,7 @@ public class ComputerTipItem extends Item {
 	}
 
 	@Override
-	public int getUseDuration(ItemStack itemstack) {
+	public int getUseDuration(ItemStack itemstack, LivingEntity entity) {
 		return 32;
 	}
 

@@ -1,6 +1,7 @@
 
 package net.mcreator.starwarsexpansion.block;
 
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.StairBlock;
@@ -9,7 +10,7 @@ import net.minecraft.world.level.block.Blocks;
 
 public class MetalStairsBlock extends StairBlock {
 	public MetalStairsBlock() {
-		super(() -> Blocks.AIR.defaultBlockState(), BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(2f, 15f).requiresCorrectToolForDrops());
+		super(Blocks.AIR.defaultBlockState(), BlockBehaviour.Properties.of().sound(SoundType.METAL).strength(2f, 15f).requiresCorrectToolForDrops());
 	}
 
 	@Override

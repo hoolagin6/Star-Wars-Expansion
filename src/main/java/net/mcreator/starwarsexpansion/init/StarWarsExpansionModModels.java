@@ -4,10 +4,11 @@
  */
 package net.mcreator.starwarsexpansion.init;
 
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.api.distmarker.Dist;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.api.distmarker.Dist;
 
 import net.mcreator.starwarsexpansion.client.model.Modeltempleguard;
 import net.mcreator.starwarsexpansion.client.model.Modelstormtrooper;
@@ -24,7 +25,7 @@ import net.mcreator.starwarsexpansion.client.model.Modelbeskararmor;
 import net.mcreator.starwarsexpansion.client.model.Modelband;
 import net.mcreator.starwarsexpansion.client.model.Modelancientsithmask;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = {Dist.CLIENT})
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, value = {Dist.CLIENT})
 public class StarWarsExpansionModModels {
 	@SubscribeEvent
 	public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {

@@ -1,9 +1,10 @@
 
 package net.mcreator.starwarsexpansion.world.inventory;
 
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.item.ItemStack;
@@ -13,7 +14,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.core.BlockPos;
 
 import net.mcreator.starwarsexpansion.init.StarWarsExpansionModMenus;
@@ -35,7 +36,7 @@ public class PlanetAnchorGUIMenu extends AbstractContainerMenu implements Suppli
 	private Entity boundEntity = null;
 	private BlockEntity boundBlockEntity = null;
 
-	public PlanetAnchorGUIMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
+	public PlanetAnchorGUIMenu(int id, Inventory inv, RegistryFriendlyByteBuf extraData) {
 		super(StarWarsExpansionModMenus.PLANET_ANCHOR_GUI.get(), id);
 		this.entity = inv.player;
 		this.world = inv.player.level();

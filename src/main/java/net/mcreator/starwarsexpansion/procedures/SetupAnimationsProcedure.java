@@ -1,92 +1,109 @@
 package net.mcreator.starwarsexpansion.procedures;
 
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.Event;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 import net.mcreator.starwarsexpansion.StarWarsExpansionMod;
 
 import javax.annotation.Nullable;
 
-import java.util.function.Supplier;
+import com.zigythebird.playeranim.api.PlayerAnimationAccess;
+import com.zigythebird.playeranim.api.PlayerAnimationFactory;
+import com.zigythebird.playeranim.animation.PlayerAnimManager;
+import com.zigythebird.playeranim.animation.PlayerAnimationController;
+import com.zigythebird.playeranimcore.animation.layered.IAnimation;
+import com.zigythebird.playeranimcore.animation.layered.ModifierLayer;
 
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationFactory;
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
-import dev.kosmx.playerAnim.api.layered.ModifierLayer;
-import dev.kosmx.playerAnim.api.layered.KeyframeAnimationPlayer;
-import dev.kosmx.playerAnim.api.layered.IAnimation;
-
-@Mod.EventBusSubscriber(modid = "star_wars_expansion", bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = "star_wars_expansion", bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class SetupAnimationsProcedure {
+	private static final ResourceLocation ANIMATION_LAYER_ID = ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "player_animation");
+
 	@SubscribeEvent
 	public static void onClientSetup(FMLClientSetupEvent event) {
-		PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(new ResourceLocation("star_wars_expansion", "player_animation"), 1000, SetupAnimationsProcedure::registerPlayerAnimations);
+		PlayerAnimationFactory.ANIMATION_DATA_FACTORY.registerFactory(ANIMATION_LAYER_ID, 1000, SetupAnimationsProcedure::registerPlayerAnimations);
 	}
 
 	private static IAnimation registerPlayerAnimations(net.minecraft.client.player.AbstractClientPlayer player) {
 		return new ModifierLayer<>();
 	}
 
-	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-	public static class StarWarsExpansionModAnimationMessage {
-		Component animation;
+	@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+	public static class StarWarsExpansionModAnimationMessage implements CustomPacketPayload {
+		public static final CustomPacketPayload.Type<StarWarsExpansionModAnimationMessage> TYPE = new CustomPacketPayload.Type<>(
+				ResourceLocation.fromNamespaceAndPath(StarWarsExpansionMod.MODID, "player_animation_message"));
+
+		public static final StreamCodec<FriendlyByteBuf, StarWarsExpansionModAnimationMessage> STREAM_CODEC = StreamCodec.of(
+				(buffer, message) -> {
+					buffer.writeUtf(message.animation);
+					buffer.writeVarInt(message.target);
+					buffer.writeBoolean(message.override);
+				},
+				buffer -> new StarWarsExpansionModAnimationMessage(buffer.readUtf(), buffer.readVarInt(),
+						buffer.readBoolean()));
+
+		String animation;
 		int target;
 		boolean override;
 
-		public StarWarsExpansionModAnimationMessage(Component animation, int target, boolean override) {
+		public StarWarsExpansionModAnimationMessage(String animation, int target, boolean override) {
 			this.animation = animation;
 			this.target = target;
 			this.override = override;
 		}
 
-		public StarWarsExpansionModAnimationMessage(FriendlyByteBuf buffer) {
-			this.animation = buffer.readComponent();
-			this.target = buffer.readInt();
-			this.override = buffer.readBoolean();
+		@Override
+		public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+			return TYPE;
 		}
 
-		public static void buffer(StarWarsExpansionModAnimationMessage message, FriendlyByteBuf buffer) {
-			buffer.writeComponent(message.animation);
-			buffer.writeInt(message.target);
-			buffer.writeBoolean(message.override);
-		}
-
-		public static void handler(StarWarsExpansionModAnimationMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-			NetworkEvent.Context context = contextSupplier.get();
+		public static void handle(StarWarsExpansionModAnimationMessage message, IPayloadContext context) {
 			context.enqueueWork(() -> {
-				Level level = context.getSender().level();
+				Level level = context.player().level();
 				if (level.getEntity(message.target) != null) {
 					Player player = (Player) level.getEntity(message.target);
-					setAnimationClientside(player, message.animation.getString(), message.override);
+					setAnimationClientside(player, message.animation, message.override);
 				}
 			});
-			context.setPacketHandled(true);
 		}
 
 		@SubscribeEvent
-		public static void registerMessage(FMLCommonSetupEvent event) {
-			StarWarsExpansionMod.addNetworkMessage(StarWarsExpansionModAnimationMessage.class, StarWarsExpansionModAnimationMessage::buffer, StarWarsExpansionModAnimationMessage::new, StarWarsExpansionModAnimationMessage::handler);
+		public static void register(RegisterPayloadHandlersEvent event) {
+			event.registrar("1").playToClient(StarWarsExpansionModAnimationMessage.TYPE,
+					StarWarsExpansionModAnimationMessage.STREAM_CODEC, StarWarsExpansionModAnimationMessage::handle);
 		}
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public static void setAnimationClientside(Player player, String anim, boolean override) {
 		if (player instanceof net.minecraft.client.player.AbstractClientPlayer player_) {
-			var animation = (ModifierLayer<IAnimation>) PlayerAnimationAccess.getPlayerAssociatedData(player_).get(new ResourceLocation("star_wars_expansion", "player_animation"));
-			if (animation != null && override ? true : !animation.isActive()) {
-				animation.setAnimation(new KeyframeAnimationPlayer(PlayerAnimationRegistry.getAnimation(new ResourceLocation("star_wars_expansion", anim))));
+			PlayerAnimManager manager;
+			try {
+				manager = PlayerAnimationAccess.getPlayerAnimManager(player_);
+			} catch (IllegalArgumentException e) {
+				return;
+			}
+			for (var layer : manager.getLayers()) {
+				if (layer.second() instanceof PlayerAnimationController controller) {
+					if (override || !controller.isActive()) {
+						controller.triggerAnimation(ResourceLocation.fromNamespaceAndPath("star_wars_expansion", anim));
+					}
+					break;
+				}
 			}
 		}
 	}

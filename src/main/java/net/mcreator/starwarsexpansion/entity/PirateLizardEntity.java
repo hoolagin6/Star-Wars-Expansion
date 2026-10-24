@@ -2,16 +2,14 @@
 package net.mcreator.starwarsexpansion.entity;
 
 import software.bernie.geckolib.util.GeckoLibUtil;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animatable.GeoEntity;
 
-import net.minecraftforge.network.PlayMessages;
-import net.minecraftforge.network.NetworkHooks;
 
 import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
@@ -26,7 +24,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EntityType;
@@ -35,11 +32,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.nbt.CompoundTag;
 
-import net.mcreator.starwarsexpansion.init.StarWarsExpansionModEntities;
 
 import javax.annotation.Nullable;
 
@@ -55,24 +49,20 @@ public class PirateLizardEntity extends Monster implements RangedAttackMob, GeoE
 	private long lastSwing;
 	public String animationprocedure = "empty";
 
-	public PirateLizardEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(StarWarsExpansionModEntities.PIRATE_LIZARD.get(), world);
-	}
 
 	public PirateLizardEntity(EntityType<PirateLizardEntity> type, Level world) {
 		super(type, world);
 		xpReward = 0;
 		setNoAi(false);
-		setMaxUpStep(0.6f);
 		setPersistenceRequired();
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "piratelizard");
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(SHOOT, false);
+		builder.define(ANIMATION, "undefined");
+		builder.define(TEXTURE, "piratelizard");
 	}
 
 	public void setTexture(String texture) {
@@ -83,10 +73,6 @@ public class PirateLizardEntity extends Monster implements RangedAttackMob, GeoE
 		return this.entityData.get(TEXTURE);
 	}
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
 
 	@Override
 	protected void registerGoals() {
@@ -191,10 +177,6 @@ public class PirateLizardEntity extends Monster implements RangedAttackMob, GeoE
 		}
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
 
 	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
@@ -220,10 +202,6 @@ public class PirateLizardEntity extends Monster implements RangedAttackMob, GeoE
 		this.refreshDimensions();
 	}
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
 
 	@Override
 	public void performRangedAttack(LivingEntity target, float flval) {
@@ -300,7 +278,7 @@ public class PirateLizardEntity extends Monster implements RangedAttackMob, GeoE
 		++this.deathTime;
 		if (this.deathTime == 20) {
 			this.remove(PirateLizardEntity.RemovalReason.KILLED);
-			this.dropExperience();
+			this.dropExperience(null);
 		}
 	}
 
@@ -323,4 +301,9 @@ public class PirateLizardEntity extends Monster implements RangedAttackMob, GeoE
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
 	}
+	@Override
+	public float maxUpStep() {
+		return 0.6F;
+	}
+
 }

@@ -1,10 +1,8 @@
 
 package net.mcreator.starwarsexpansion.entity;
 
-import net.minecraftforge.network.PlayMessages;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
 
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.BlockHitResult;
@@ -15,8 +13,6 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.util.RandomSource;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.Packet;
 
 import net.mcreator.starwarsexpansion.procedures.LaserProjectileWhileProjectileFlyingTickProcedure;
 import net.mcreator.starwarsexpansion.procedures.LaserProjectileProjectileHitsBlockProcedure;
@@ -27,30 +23,28 @@ import net.mcreator.starwarsexpansion.init.StarWarsExpansionModEntities;
 public class LaserProjectileEntity extends AbstractArrow implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(StarWarsExpansionModItems.KYBER_CRYSTAL_RED.get());
 
-	public LaserProjectileEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(StarWarsExpansionModEntities.LASER_PROJECTILE.get(), world);
-	}
 
 	public LaserProjectileEntity(EntityType<? extends LaserProjectileEntity> type, Level world) {
 		super(type, world);
 	}
 
 	public LaserProjectileEntity(EntityType<? extends LaserProjectileEntity> type, double x, double y, double z, Level world) {
-		super(type, x, y, z, world);
+		super(type, x, y, z, world, PROJECTILE_ITEM, null);
 	}
 
 	public LaserProjectileEntity(EntityType<? extends LaserProjectileEntity> type, LivingEntity entity, Level world) {
-		super(type, entity, world);
+		super(type, entity, world, PROJECTILE_ITEM, null);
 	}
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ItemStack getItem() {
+		return PROJECTILE_ITEM;
+	}
+
+	@Override
+	protected ItemStack getDefaultPickupItem() {
 		return PROJECTILE_ITEM;
 	}
 
@@ -99,7 +93,6 @@ public class LaserProjectileEntity extends AbstractArrow implements ItemSupplier
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
 		entityarrow.setBaseDamage(damage);
-		entityarrow.setKnockback(knockback);
 		world.addFreshEntity(entityarrow);
 		return entityarrow;
 	}
@@ -112,7 +105,6 @@ public class LaserProjectileEntity extends AbstractArrow implements ItemSupplier
 		entityarrow.shoot(dx, dy - entityarrow.getY() + Math.hypot(dx, dz) * 0.2F, dz, 6f * 2, 12.0F);
 		entityarrow.setSilent(true);
 		entityarrow.setBaseDamage(5);
-		entityarrow.setKnockback(0);
 		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);
 		return entityarrow;

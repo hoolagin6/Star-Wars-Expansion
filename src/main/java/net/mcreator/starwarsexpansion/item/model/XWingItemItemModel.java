@@ -9,16 +9,16 @@ import net.mcreator.starwarsexpansion.item.XWingItemItem;
 public class XWingItemItemModel extends GeoModel<XWingItemItem> {
 	@Override
 	public ResourceLocation getAnimationResource(XWingItemItem animatable) {
-		return new ResourceLocation("star_wars_expansion", "animations/xwingitem.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "animations/xwingitem.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(XWingItemItem animatable) {
-		return new ResourceLocation("star_wars_expansion", "geo/xwingitem.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "geo/xwingitem.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(XWingItemItem animatable) {
-		return new ResourceLocation("star_wars_expansion", "textures/item/xwing.png");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "textures/item/xwing.png");
 	}
 }

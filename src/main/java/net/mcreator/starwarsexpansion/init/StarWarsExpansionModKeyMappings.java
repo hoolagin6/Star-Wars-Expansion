@@ -6,11 +6,14 @@ package net.mcreator.starwarsexpansion.init;
 
 import org.lwjgl.glfw.GLFW;
 
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.api.distmarker.Dist;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.api.distmarker.Dist;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.KeyMapping;
@@ -19,9 +22,8 @@ import net.mcreator.starwarsexpansion.network.SpaceshipShootKeyMessage;
 import net.mcreator.starwarsexpansion.network.SpaceshipMoveKeyMessage;
 import net.mcreator.starwarsexpansion.network.SpaceshipAnchorGUIKeyMessage;
 import net.mcreator.starwarsexpansion.network.DoubleJumpKeyMessage;
-import net.mcreator.starwarsexpansion.StarWarsExpansionMod;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = {Dist.CLIENT})
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, value = {Dist.CLIENT})
 public class StarWarsExpansionModKeyMappings {
 	public static final KeyMapping DOUBLE_JUMP_KEY = new KeyMapping("key.star_wars_expansion.double_jump_key", GLFW.GLFW_KEY_SPACE, "key.categories.movement") {
 		private boolean isDownOld = false;
@@ -30,7 +32,7 @@ public class StarWarsExpansionModKeyMappings {
 		public void setDown(boolean isDown) {
 			super.setDown(isDown);
 			if (isDownOld != isDown && isDown) {
-				StarWarsExpansionMod.PACKET_HANDLER.sendToServer(new DoubleJumpKeyMessage(0, 0));
+				PacketDistributor.sendToServer(new DoubleJumpKeyMessage(0, 0));
 				DoubleJumpKeyMessage.pressAction(Minecraft.getInstance().player, 0, 0);
 			}
 			isDownOld = isDown;
@@ -43,12 +45,12 @@ public class StarWarsExpansionModKeyMappings {
 		public void setDown(boolean isDown) {
 			super.setDown(isDown);
 			if (isDownOld != isDown && isDown) {
-				StarWarsExpansionMod.PACKET_HANDLER.sendToServer(new SpaceshipMoveKeyMessage(0, 0));
+				PacketDistributor.sendToServer(new SpaceshipMoveKeyMessage(0, 0));
 				SpaceshipMoveKeyMessage.pressAction(Minecraft.getInstance().player, 0, 0);
 				SPACESHIP_MOVE_KEY_LASTPRESS = System.currentTimeMillis();
 			} else if (isDownOld != isDown && !isDown) {
 				int dt = (int) (System.currentTimeMillis() - SPACESHIP_MOVE_KEY_LASTPRESS);
-				StarWarsExpansionMod.PACKET_HANDLER.sendToServer(new SpaceshipMoveKeyMessage(1, dt));
+				PacketDistributor.sendToServer(new SpaceshipMoveKeyMessage(1, dt));
 				SpaceshipMoveKeyMessage.pressAction(Minecraft.getInstance().player, 1, dt);
 			}
 			isDownOld = isDown;
@@ -61,12 +63,12 @@ public class StarWarsExpansionModKeyMappings {
 		public void setDown(boolean isDown) {
 			super.setDown(isDown);
 			if (isDownOld != isDown && isDown) {
-				StarWarsExpansionMod.PACKET_HANDLER.sendToServer(new SpaceshipShootKeyMessage(0, 0));
+				PacketDistributor.sendToServer(new SpaceshipShootKeyMessage(0, 0));
 				SpaceshipShootKeyMessage.pressAction(Minecraft.getInstance().player, 0, 0);
 				SPACESHIP_SHOOT_KEY_LASTPRESS = System.currentTimeMillis();
 			} else if (isDownOld != isDown && !isDown) {
 				int dt = (int) (System.currentTimeMillis() - SPACESHIP_SHOOT_KEY_LASTPRESS);
-				StarWarsExpansionMod.PACKET_HANDLER.sendToServer(new SpaceshipShootKeyMessage(1, dt));
+				PacketDistributor.sendToServer(new SpaceshipShootKeyMessage(1, dt));
 				SpaceshipShootKeyMessage.pressAction(Minecraft.getInstance().player, 1, dt);
 			}
 			isDownOld = isDown;
@@ -79,7 +81,7 @@ public class StarWarsExpansionModKeyMappings {
 		public void setDown(boolean isDown) {
 			super.setDown(isDown);
 			if (isDownOld != isDown && isDown) {
-				StarWarsExpansionMod.PACKET_HANDLER.sendToServer(new SpaceshipAnchorGUIKeyMessage(0, 0));
+				PacketDistributor.sendToServer(new SpaceshipAnchorGUIKeyMessage(0, 0));
 				SpaceshipAnchorGUIKeyMessage.pressAction(Minecraft.getInstance().player, 0, 0);
 			}
 			isDownOld = isDown;
@@ -96,10 +98,10 @@ public class StarWarsExpansionModKeyMappings {
 		event.register(SPACESHIP_ANCHOR_GUI_KEY);
 	}
 
-	@Mod.EventBusSubscriber({Dist.CLIENT})
+	@EventBusSubscriber({Dist.CLIENT})
 	public static class KeyEventListener {
 		@SubscribeEvent
-		public static void onClientTick(TickEvent.ClientTickEvent event) {
+		public static void onClientTick(ClientTickEvent.Post event) {
 			if (Minecraft.getInstance().screen == null) {
 				DOUBLE_JUMP_KEY.consumeClick();
 				SPACESHIP_MOVE_KEY.consumeClick();

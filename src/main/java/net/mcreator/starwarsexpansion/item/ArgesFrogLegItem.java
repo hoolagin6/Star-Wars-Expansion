@@ -7,6 +7,6 @@ import net.minecraft.world.food.FoodProperties;
 
 public class ArgesFrogLegItem extends Item {
 	public ArgesFrogLegItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(1).saturationMod(0.4f).meat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(1).saturationModifier(0.4f).fast().build()));
 	}
 }

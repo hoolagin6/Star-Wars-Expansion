@@ -4,10 +4,11 @@
  */
 package net.mcreator.starwarsexpansion.init;
 
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.api.distmarker.Dist;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.api.distmarker.Dist;
 
 import net.mcreator.starwarsexpansion.client.renderer.XWingRenderer;
 import net.mcreator.starwarsexpansion.client.renderer.WampaRenderer;
@@ -62,7 +63,7 @@ import net.mcreator.starwarsexpansion.client.renderer.ArgesFrogRenderer;
 import net.mcreator.starwarsexpansion.client.renderer.AncientSithLordRenderer;
 import net.mcreator.starwarsexpansion.client.renderer.ATSTRenderer;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class StarWarsExpansionModEntityRenderers {
 	@SubscribeEvent
 	public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {

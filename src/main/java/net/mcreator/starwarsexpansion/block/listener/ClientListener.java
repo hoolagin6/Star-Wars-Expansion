@@ -1,10 +1,11 @@
 package net.mcreator.starwarsexpansion.block.listener;
 
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
 
 import net.mcreator.starwarsexpansion.init.StarWarsExpansionModBlockEntities;
 import net.mcreator.starwarsexpansion.block.renderer.WorkspaceBenchTileRenderer;
@@ -18,7 +19,7 @@ import net.mcreator.starwarsexpansion.block.renderer.ComputerStationTileRenderer
 import net.mcreator.starwarsexpansion.block.renderer.CarboniteTileRenderer;
 import net.mcreator.starwarsexpansion.StarWarsExpansionMod;
 
-@Mod.EventBusSubscriber(modid = StarWarsExpansionMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = StarWarsExpansionMod.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientListener {
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent

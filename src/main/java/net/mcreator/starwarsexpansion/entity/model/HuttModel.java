@@ -9,17 +9,17 @@ import net.mcreator.starwarsexpansion.entity.HuttEntity;
 public class HuttModel extends GeoModel<HuttEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(HuttEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "animations/hutt.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "animations/hutt.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(HuttEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "geo/hutt.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "geo/hutt.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(HuttEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "textures/entities/" + entity.getTexture() + ".png");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion",  "textures/entities/" + entity.getTexture() + ".png");
 	}
 
 }

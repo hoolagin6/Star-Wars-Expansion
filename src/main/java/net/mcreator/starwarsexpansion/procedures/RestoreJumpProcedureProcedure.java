@@ -1,9 +1,9 @@
 package net.mcreator.starwarsexpansion.procedures;
 
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.event.entity.living.LivingEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.bus.api.Event;
+import net.neoforged.neoforge.event.entity.living.LivingEvent;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.Entity;
@@ -12,7 +12,7 @@ import net.mcreator.starwarsexpansion.network.StarWarsExpansionModVariables;
 
 import javax.annotation.Nullable;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class RestoreJumpProcedureProcedure {
 	@SubscribeEvent
 	public static void onEntityJump(LivingEvent.LivingJumpEvent event) {
@@ -29,10 +29,9 @@ public class RestoreJumpProcedureProcedure {
 		if (entity instanceof Player) {
 			{
 				boolean _setval = false;
-				entity.getCapability(StarWarsExpansionModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-					capability.jumpvar = _setval;
-					capability.syncPlayerVariables(entity);
-				});
+				StarWarsExpansionModVariables.getPlayerVariables(entity).jumpvar = _setval;
+				StarWarsExpansionModVariables.getPlayerVariables(entity).syncPlayerVariables(entity);
+				StarWarsExpansionModVariables.storePlayerVariables(entity, StarWarsExpansionModVariables.getPlayerVariables(entity));
 			}
 		}
 	}

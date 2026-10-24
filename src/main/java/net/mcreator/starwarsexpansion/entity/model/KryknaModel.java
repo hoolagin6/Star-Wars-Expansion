@@ -9,17 +9,17 @@ import net.mcreator.starwarsexpansion.entity.KryknaEntity;
 public class KryknaModel extends GeoModel<KryknaEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(KryknaEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "animations/krykna.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "animations/krykna.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(KryknaEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "geo/krykna.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "geo/krykna.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(KryknaEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "textures/entities/" + entity.getTexture() + ".png");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion",  "textures/entities/" + entity.getTexture() + ".png");
 	}
 
 }

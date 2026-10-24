@@ -9,17 +9,17 @@ import net.mcreator.starwarsexpansion.entity.AncientSithLordEntity;
 public class AncientSithLordModel extends GeoModel<AncientSithLordEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(AncientSithLordEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "animations/ancientsith.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "animations/ancientsith.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(AncientSithLordEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "geo/ancientsith.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "geo/ancientsith.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(AncientSithLordEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "textures/entities/" + entity.getTexture() + ".png");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion",  "textures/entities/" + entity.getTexture() + ".png");
 	}
 
 }

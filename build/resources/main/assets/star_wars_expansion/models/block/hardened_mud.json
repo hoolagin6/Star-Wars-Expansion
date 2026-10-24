@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "star_wars_expansion:block/hardened_mud",
-    "particle": "star_wars_expansion:block/hardened_mud"
-  },
-  "render_type": "solid"
-}

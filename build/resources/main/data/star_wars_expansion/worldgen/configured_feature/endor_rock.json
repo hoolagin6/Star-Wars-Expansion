@@ -1,9 +1,0 @@
-{
-  "type": "star_wars_expansion:structure_feature",
-  "config": {
-    "structure": "star_wars_expansion:rock1",
-    "random_rotation": true,
-    "random_mirror": true,
-    "ignored_blocks": "minecraft:air"
-  }
-}

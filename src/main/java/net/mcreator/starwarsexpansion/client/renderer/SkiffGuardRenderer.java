@@ -13,11 +13,11 @@ import net.mcreator.starwarsexpansion.entity.SkiffGuardEntity;
 public class SkiffGuardRenderer extends HumanoidMobRenderer<SkiffGuardEntity, HumanoidModel<SkiffGuardEntity>> {
 	public SkiffGuardRenderer(EntityRendererProvider.Context context) {
 		super(context, new HumanoidModel<SkiffGuardEntity>(context.bakeLayer(ModelLayers.PLAYER)), 0.5f);
-		this.addLayer(new HumanoidArmorLayer(this, new HumanoidModel(context.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidModel(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), context.getModelManager()));
+		this.addLayer(new HumanoidArmorLayer(this, new HumanoidModel<>(context.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidModel<>(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), context.getModelManager()));
 	}
 
 	@Override
 	public ResourceLocation getTextureLocation(SkiffGuardEntity entity) {
-		return new ResourceLocation("star_wars_expansion:textures/entities/human_blue.png");
+		return ResourceLocation.parse("star_wars_expansion:textures/entities/human_blue.png");
 	}
 }

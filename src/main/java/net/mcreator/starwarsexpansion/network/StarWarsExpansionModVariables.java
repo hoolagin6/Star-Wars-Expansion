@@ -1,105 +1,96 @@
 package net.mcreator.starwarsexpansion.network;
 
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.Capability;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.capabilities.EntityCapability;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.Direction;
-import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
 import net.mcreator.starwarsexpansion.StarWarsExpansionMod;
 
-import java.util.function.Supplier;
+import java.util.Map;
+import java.util.WeakHashMap;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class StarWarsExpansionModVariables {
-	@SubscribeEvent
-	public static void init(FMLCommonSetupEvent event) {
-		StarWarsExpansionMod.addNetworkMessage(PlayerVariablesSyncMessage.class, PlayerVariablesSyncMessage::buffer, PlayerVariablesSyncMessage::new, PlayerVariablesSyncMessage::handler);
-	}
+	public static final EntityCapability<PlayerVariables, Void> PLAYER_VARIABLES_CAPABILITY = EntityCapability.createVoid(
+			ResourceLocation.fromNamespaceAndPath(StarWarsExpansionMod.MODID, "player_variables"), PlayerVariables.class);
+
+	private static final Map<Player, PlayerVariables> CACHE = new WeakHashMap<>();
 
 	@SubscribeEvent
 	public static void init(RegisterCapabilitiesEvent event) {
-		event.register(PlayerVariables.class);
+		event.registerEntity(PLAYER_VARIABLES_CAPABILITY, EntityType.PLAYER, (entity, ctx) -> {
+			if (entity instanceof Player player)
+				return getPlayerVariables(player);
+			return null;
+		});
 	}
 
-	@Mod.EventBusSubscriber
+	public static PlayerVariables getPlayerVariables(Entity entity) {
+		if (!(entity instanceof Player player))
+			return new PlayerVariables();
+		PlayerVariables cached = CACHE.get(player);
+		if (cached != null)
+			return cached;
+		PlayerVariables variables = new PlayerVariables();
+		CompoundTag tag = player.getPersistentData();
+		if (tag.contains("PlayerVariables"))
+			variables.readNBT(tag.getCompound("PlayerVariables"));
+		CACHE.put(player, variables);
+		return variables;
+	}
+
+	public static void storePlayerVariables(Entity entity, PlayerVariables variables) {
+		if (!(entity instanceof Player player))
+			return;
+		CompoundTag tag = player.getPersistentData();
+		tag.put("PlayerVariables", (CompoundTag) variables.writeNBT());
+	}
+
+	@EventBusSubscriber
 	public static class EventBusVariableHandlers {
 		@SubscribeEvent
 		public static void onPlayerLoggedInSyncPlayerVariables(PlayerEvent.PlayerLoggedInEvent event) {
 			if (!event.getEntity().level().isClientSide())
-				((PlayerVariables) event.getEntity().getCapability(PLAYER_VARIABLES_CAPABILITY, null).orElse(new PlayerVariables())).syncPlayerVariables(event.getEntity());
+				getPlayerVariables(event.getEntity()).syncPlayerVariables(event.getEntity());
 		}
 
 		@SubscribeEvent
 		public static void onPlayerRespawnedSyncPlayerVariables(PlayerEvent.PlayerRespawnEvent event) {
 			if (!event.getEntity().level().isClientSide())
-				((PlayerVariables) event.getEntity().getCapability(PLAYER_VARIABLES_CAPABILITY, null).orElse(new PlayerVariables())).syncPlayerVariables(event.getEntity());
+				getPlayerVariables(event.getEntity()).syncPlayerVariables(event.getEntity());
 		}
 
 		@SubscribeEvent
 		public static void onPlayerChangedDimensionSyncPlayerVariables(PlayerEvent.PlayerChangedDimensionEvent event) {
 			if (!event.getEntity().level().isClientSide())
-				((PlayerVariables) event.getEntity().getCapability(PLAYER_VARIABLES_CAPABILITY, null).orElse(new PlayerVariables())).syncPlayerVariables(event.getEntity());
+				getPlayerVariables(event.getEntity()).syncPlayerVariables(event.getEntity());
 		}
 
 		@SubscribeEvent
 		public static void clonePlayer(PlayerEvent.Clone event) {
-			event.getOriginal().revive();
-			PlayerVariables original = ((PlayerVariables) event.getOriginal().getCapability(PLAYER_VARIABLES_CAPABILITY, null).orElse(new PlayerVariables()));
-			PlayerVariables clone = ((PlayerVariables) event.getEntity().getCapability(PLAYER_VARIABLES_CAPABILITY, null).orElse(new PlayerVariables()));
+			PlayerVariables original = getPlayerVariables(event.getOriginal());
+			PlayerVariables clone = getPlayerVariables(event.getEntity());
 			if (!event.isWasDeath()) {
 				clone.jumpvar = original.jumpvar;
 				clone.ssmov = original.ssmov;
+				storePlayerVariables(event.getEntity(), clone);
 			}
-		}
-	}
-
-	public static final Capability<PlayerVariables> PLAYER_VARIABLES_CAPABILITY = CapabilityManager.get(new CapabilityToken<PlayerVariables>() {
-	});
-
-	@Mod.EventBusSubscriber
-	private static class PlayerVariablesProvider implements ICapabilitySerializable<Tag> {
-		@SubscribeEvent
-		public static void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
-			if (event.getObject() instanceof Player && !(event.getObject() instanceof FakePlayer))
-				event.addCapability(new ResourceLocation("star_wars_expansion", "player_variables"), new PlayerVariablesProvider());
-		}
-
-		private final PlayerVariables playerVariables = new PlayerVariables();
-		private final LazyOptional<PlayerVariables> instance = LazyOptional.of(() -> playerVariables);
-
-		@Override
-		public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
-			return cap == PLAYER_VARIABLES_CAPABILITY ? instance.cast() : LazyOptional.empty();
-		}
-
-		@Override
-		public Tag serializeNBT() {
-			return playerVariables.writeNBT();
-		}
-
-		@Override
-		public void deserializeNBT(Tag nbt) {
-			playerVariables.readNBT(nbt);
 		}
 	}
 
@@ -109,7 +100,7 @@ public class StarWarsExpansionModVariables {
 
 		public void syncPlayerVariables(Entity entity) {
 			if (entity instanceof ServerPlayer serverPlayer)
-				StarWarsExpansionMod.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new PlayerVariablesSyncMessage(this));
+				PacketDistributor.sendToPlayer(serverPlayer, new PlayerVariablesSyncMessage(this));
 		}
 
 		public Tag writeNBT() {
@@ -126,32 +117,46 @@ public class StarWarsExpansionModVariables {
 		}
 	}
 
-	public static class PlayerVariablesSyncMessage {
-		private final PlayerVariables data;
+	@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+	public static class PlayerVariablesSyncMessage implements CustomPacketPayload {
+		public static final CustomPacketPayload.Type<PlayerVariablesSyncMessage> TYPE = new CustomPacketPayload.Type<>(
+				ResourceLocation.fromNamespaceAndPath(StarWarsExpansionMod.MODID, "player_variables_sync"));
 
-		public PlayerVariablesSyncMessage(FriendlyByteBuf buffer) {
-			this.data = new PlayerVariables();
-			this.data.readNBT(buffer.readNbt());
-		}
+		public static final StreamCodec<FriendlyByteBuf, PlayerVariablesSyncMessage> STREAM_CODEC = StreamCodec.of(
+				(buffer, message) -> buffer.writeNbt((CompoundTag) message.data.writeNBT()),
+				buffer -> {
+					PlayerVariables variables = new PlayerVariables();
+					CompoundTag tag = buffer.readNbt();
+					if (tag != null)
+						variables.readNBT(tag);
+					return new PlayerVariablesSyncMessage(variables);
+					});
+
+		private final PlayerVariables data;
 
 		public PlayerVariablesSyncMessage(PlayerVariables data) {
 			this.data = data;
 		}
 
-		public static void buffer(PlayerVariablesSyncMessage message, FriendlyByteBuf buffer) {
-			buffer.writeNbt((CompoundTag) message.data.writeNBT());
+		@Override
+		public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+			return TYPE;
 		}
 
-		public static void handler(PlayerVariablesSyncMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-			NetworkEvent.Context context = contextSupplier.get();
+		public static void handle(PlayerVariablesSyncMessage message, IPayloadContext context) {
 			context.enqueueWork(() -> {
-				if (!context.getDirection().getReceptionSide().isServer()) {
-					PlayerVariables variables = ((PlayerVariables) Minecraft.getInstance().player.getCapability(PLAYER_VARIABLES_CAPABILITY, null).orElse(new PlayerVariables()));
-					variables.jumpvar = message.data.jumpvar;
-					variables.ssmov = message.data.ssmov;
-				}
+				Player player = context.player();
+				PlayerVariables variables = getPlayerVariables(player);
+				variables.jumpvar = message.data.jumpvar;
+				variables.ssmov = message.data.ssmov;
+				storePlayerVariables(player, variables);
 			});
-			context.setPacketHandled(true);
+		}
+
+		@SubscribeEvent
+		public static void register(RegisterPayloadHandlersEvent event) {
+			event.registrar("1").playToClient(PlayerVariablesSyncMessage.TYPE, PlayerVariablesSyncMessage.STREAM_CODEC,
+					PlayerVariablesSyncMessage::handle);
 		}
 	}
 }

@@ -1,14 +1,17 @@
-
 package net.mcreator.starwarsexpansion.network;
 
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 
 import net.mcreator.starwarsexpansion.world.inventory.PlanetAnchorGUIMenu;
@@ -19,19 +22,24 @@ import net.mcreator.starwarsexpansion.procedures.TravelEarthProcedure;
 import net.mcreator.starwarsexpansion.procedures.TravelDenyProcedureProcedure;
 import net.mcreator.starwarsexpansion.StarWarsExpansionMod;
 
-import java.util.function.Supplier;
 import java.util.HashMap;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class PlanetAnchorGUIButtonMessage {
-	private final int buttonID, x, y, z;
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+public class PlanetAnchorGUIButtonMessage implements CustomPacketPayload {
+	public static final CustomPacketPayload.Type<PlanetAnchorGUIButtonMessage> TYPE = new CustomPacketPayload.Type<>(
+			ResourceLocation.fromNamespaceAndPath(StarWarsExpansionMod.MODID, "planet_anchor_gui_button"));
 
-	public PlanetAnchorGUIButtonMessage(FriendlyByteBuf buffer) {
-		this.buttonID = buffer.readInt();
-		this.x = buffer.readInt();
-		this.y = buffer.readInt();
-		this.z = buffer.readInt();
-	}
+	public static final StreamCodec<FriendlyByteBuf, PlanetAnchorGUIButtonMessage> STREAM_CODEC = StreamCodec.of(
+			(buffer, message) -> {
+				buffer.writeVarInt(message.buttonID);
+				buffer.writeVarInt(message.x);
+				buffer.writeVarInt(message.y);
+				buffer.writeVarInt(message.z);
+			},
+			buffer -> new PlanetAnchorGUIButtonMessage(buffer.readVarInt(), buffer.readVarInt(), buffer.readVarInt(),
+					buffer.readVarInt()));
+
+	private final int buttonID, x, y, z;
 
 	public PlanetAnchorGUIButtonMessage(int buttonID, int x, int y, int z) {
 		this.buttonID = buttonID;
@@ -40,24 +48,20 @@ public class PlanetAnchorGUIButtonMessage {
 		this.z = z;
 	}
 
-	public static void buffer(PlanetAnchorGUIButtonMessage message, FriendlyByteBuf buffer) {
-		buffer.writeInt(message.buttonID);
-		buffer.writeInt(message.x);
-		buffer.writeInt(message.y);
-		buffer.writeInt(message.z);
+	@Override
+	public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+		return TYPE;
 	}
 
-	public static void handler(PlanetAnchorGUIButtonMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-		NetworkEvent.Context context = contextSupplier.get();
+	public static void handle(PlanetAnchorGUIButtonMessage message, IPayloadContext context) {
 		context.enqueueWork(() -> {
-			Player entity = context.getSender();
+			Player entity = context.player();
 			int buttonID = message.buttonID;
 			int x = message.x;
 			int y = message.y;
 			int z = message.z;
 			handleButtonAction(entity, buttonID, x, y, z);
 		});
-		context.setPacketHandled(true);
 	}
 
 	public static void handleButtonAction(Player entity, int buttonID, int x, int y, int z) {
@@ -89,7 +93,8 @@ public class PlanetAnchorGUIButtonMessage {
 	}
 
 	@SubscribeEvent
-	public static void registerMessage(FMLCommonSetupEvent event) {
-		StarWarsExpansionMod.addNetworkMessage(PlanetAnchorGUIButtonMessage.class, PlanetAnchorGUIButtonMessage::buffer, PlanetAnchorGUIButtonMessage::new, PlanetAnchorGUIButtonMessage::handler);
+	public static void register(RegisterPayloadHandlersEvent event) {
+		event.registrar("1").playToServer(PlanetAnchorGUIButtonMessage.TYPE,
+				PlanetAnchorGUIButtonMessage.STREAM_CODEC, PlanetAnchorGUIButtonMessage::handle);
 	}
 }

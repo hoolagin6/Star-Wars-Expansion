@@ -2,6 +2,7 @@ package net.mcreator.starwarsexpansion.block.renderer;
 
 import software.bernie.geckolib.renderer.GeoItemRenderer;
 
+import net.minecraft.world.level.block.Block;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.MultiBufferSource;

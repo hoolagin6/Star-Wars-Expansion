@@ -7,6 +7,6 @@ import net.minecraft.world.food.FoodProperties;
 
 public class MeiloorunItem extends Item {
 	public MeiloorunItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(4).saturationMod(0.6f).meat().build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(4).saturationModifier(0.6f).fast().build()));
 	}
 }

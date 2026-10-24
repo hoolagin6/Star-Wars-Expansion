@@ -1,54 +1,57 @@
 plugins {
-    id 'eclipse'
-    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.148'
 }
 
-version = '1.0'
-group = 'com.yourname.modid'
-archivesBaseName = 'modid'
+version = '3.1.0'
+group = 'com.fazbrick.starwarsexpansion'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+base {
+    archivesName = 'StarWarsExpansion'
+}
 
-minecraft {
-    mappings channel: 'official', version: '1.20.1'
-
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    copyIdeResources = true
+neoForge {
+    version = '21.1.264'
 
     runs {
         client {
-            def mcreatorJvmOptions = System.getenv('MCREATOR_JVM_OPTIONS')
-            if (mcreatorJvmOptions) {
-                jvmArgs += mcreatorJvmOptions.split("\\s+").findAll { it.trim() }.toList()
-            }
+            client()
+            gameDirectory = file('run')
         }
-
         server {
+            server()
+            gameDirectory = file('run')
         }
+    }
 
-        configureEach {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                examplemod {
-                    source sourceSets.main
-                }
-            }
+    mods {
+        star_wars_expansion {
+            sourceSet sourceSets.main
         }
     }
 }
 
+repositories {
+    mavenCentral()
+    maven {
+        name = 'KosmX'
+        url = 'https://maven.kosmx.dev/'
+    }
+}
+
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.20.1-47.3.0'
+    implementation files('libs/geckolib-neoforge-1.21.1-4.6.6.jar')
+    implementation files('libs/PlayerAnimationLibNeoforge-1.1.6+mc.1.21.1.jar')
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    withSourcesJar()
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    options.encoding = 'UTF-8'
+    options.release = 21
 }
-
-apply from: 'mcreator.gradle'
-

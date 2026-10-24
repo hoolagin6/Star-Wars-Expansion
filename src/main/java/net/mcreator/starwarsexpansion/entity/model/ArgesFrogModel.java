@@ -9,17 +9,17 @@ import net.mcreator.starwarsexpansion.entity.ArgesFrogEntity;
 public class ArgesFrogModel extends GeoModel<ArgesFrogEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(ArgesFrogEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "animations/arges.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "animations/arges.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(ArgesFrogEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "geo/arges.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "geo/arges.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(ArgesFrogEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "textures/entities/" + entity.getTexture() + ".png");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion",  "textures/entities/" + entity.getTexture() + ".png");
 	}
 
 }

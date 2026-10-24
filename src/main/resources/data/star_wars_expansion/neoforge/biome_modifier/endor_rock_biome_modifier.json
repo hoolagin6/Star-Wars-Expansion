@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "star_wars_expansion:endor_forest",
+  "features": "star_wars_expansion:endor_rock",
+  "step": "surface_structures"
+}

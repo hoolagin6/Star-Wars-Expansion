@@ -1,6 +1,5 @@
 package net.mcreator.starwarsexpansion.procedures;
 
-import net.minecraftforge.network.NetworkHooks;
 
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -10,7 +9,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.core.BlockPos;
 
 import net.mcreator.starwarsexpansion.world.inventory.PlanetAnchorGUIMenu;
@@ -27,7 +26,7 @@ public class SpaceshipAnchorGUIKeyOnKeyPressedProcedure {
 		if ((entity.getVehicle()) instanceof XWingEntity) {
 			if (entity instanceof ServerPlayer _ent) {
 				BlockPos _bpos = BlockPos.containing(x, y, z);
-				NetworkHooks.openScreen((ServerPlayer) _ent, new MenuProvider() {
+				((ServerPlayer) _ent).openMenu(new MenuProvider() {
 					@Override
 					public Component getDisplayName() {
 						return Component.literal("PlanetAnchorGUI");
@@ -35,7 +34,7 @@ public class SpaceshipAnchorGUIKeyOnKeyPressedProcedure {
 
 					@Override
 					public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-						return new PlanetAnchorGUIMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(_bpos));
+						return new PlanetAnchorGUIMenu(id, inventory, (RegistryFriendlyByteBuf) new RegistryFriendlyByteBuf(Unpooled.buffer(), player.level().registryAccess()).writeBlockPos(_bpos));
 					}
 				}, _bpos);
 			}
@@ -43,7 +42,7 @@ public class SpaceshipAnchorGUIKeyOnKeyPressedProcedure {
 		if ((entity.getVehicle()) instanceof TIEFighterEntity) {
 			if (entity instanceof ServerPlayer _ent) {
 				BlockPos _bpos = BlockPos.containing(x, y, z);
-				NetworkHooks.openScreen((ServerPlayer) _ent, new MenuProvider() {
+				((ServerPlayer) _ent).openMenu(new MenuProvider() {
 					@Override
 					public Component getDisplayName() {
 						return Component.literal("PlanetAnchorGUI");
@@ -51,7 +50,7 @@ public class SpaceshipAnchorGUIKeyOnKeyPressedProcedure {
 
 					@Override
 					public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-						return new PlanetAnchorGUIMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(_bpos));
+						return new PlanetAnchorGUIMenu(id, inventory, (RegistryFriendlyByteBuf) new RegistryFriendlyByteBuf(Unpooled.buffer(), player.level().registryAccess()).writeBlockPos(_bpos));
 					}
 				}, _bpos);
 			}
@@ -59,7 +58,7 @@ public class SpaceshipAnchorGUIKeyOnKeyPressedProcedure {
 		if ((entity.getVehicle()) instanceof EscapePodEntity) {
 			if (entity instanceof ServerPlayer _ent) {
 				BlockPos _bpos = BlockPos.containing(x, y, z);
-				NetworkHooks.openScreen((ServerPlayer) _ent, new MenuProvider() {
+				((ServerPlayer) _ent).openMenu(new MenuProvider() {
 					@Override
 					public Component getDisplayName() {
 						return Component.literal("PlanetAnchorGUI");
@@ -67,7 +66,7 @@ public class SpaceshipAnchorGUIKeyOnKeyPressedProcedure {
 
 					@Override
 					public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-						return new PlanetAnchorGUIMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(_bpos));
+						return new PlanetAnchorGUIMenu(id, inventory, (RegistryFriendlyByteBuf) new RegistryFriendlyByteBuf(Unpooled.buffer(), player.level().registryAccess()).writeBlockPos(_bpos));
 					}
 				}, _bpos);
 			}

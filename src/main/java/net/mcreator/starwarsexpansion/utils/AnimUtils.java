@@ -2,7 +2,6 @@ package net.mcreator.starwarsexpansion.utils;
 
 import software.bernie.geckolib.cache.object.GeoBone;
 
-import org.checkerframework.checker.units.qual.g;
 
 import net.minecraft.client.model.geom.ModelPart;
 
@@ -16,7 +15,7 @@ public class AnimUtils {
 
 	public static void renderPartOverBone(ModelPart model, GeoBone bone, PoseStack stack, VertexConsumer buffer, int packedLightIn, int packedOverlayIn, float r, float g, float b, float a) {
 		setupModelFromBone(model, bone);
-		model.render(stack, buffer, packedLightIn, packedOverlayIn, r, g, b, a);
+		model.render(stack, buffer, packedLightIn, packedOverlayIn, (((int) (r * 255.0F)) << 24) | (((int) (g * 255.0F)) << 16) | (((int) (b * 255.0F)) << 8) | ((int) (a * 255.0F)));
 	}
 
 	public static void setupModelFromBone(ModelPart model, GeoBone bone) {

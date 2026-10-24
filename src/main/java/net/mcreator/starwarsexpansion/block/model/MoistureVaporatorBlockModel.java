@@ -2,6 +2,7 @@ package net.mcreator.starwarsexpansion.block.model;
 
 import software.bernie.geckolib.model.GeoModel;
 
+import net.minecraft.world.level.block.Block;
 import net.minecraft.resources.ResourceLocation;
 
 import net.mcreator.starwarsexpansion.block.entity.MoistureVaporatorTileEntity;
@@ -9,16 +10,16 @@ import net.mcreator.starwarsexpansion.block.entity.MoistureVaporatorTileEntity;
 public class MoistureVaporatorBlockModel extends GeoModel<MoistureVaporatorTileEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(MoistureVaporatorTileEntity animatable) {
-		return new ResourceLocation("star_wars_expansion", "animations/watervaporizer.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "animations/watervaporizer.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(MoistureVaporatorTileEntity animatable) {
-		return new ResourceLocation("star_wars_expansion", "geo/watervaporizer.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "geo/watervaporizer.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(MoistureVaporatorTileEntity animatable) {
-		return new ResourceLocation("star_wars_expansion", "textures/block/water_vaporizer.png");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "textures/block/water_vaporizer.png");
 	}
 }

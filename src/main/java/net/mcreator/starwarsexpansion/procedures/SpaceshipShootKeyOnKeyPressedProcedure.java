@@ -10,7 +10,6 @@ import net.mcreator.starwarsexpansion.init.StarWarsExpansionModEntities;
 import net.mcreator.starwarsexpansion.entity.XWingEntity;
 import net.mcreator.starwarsexpansion.entity.TIEFighterEntity;
 import net.mcreator.starwarsexpansion.entity.SnowspeederEntity;
-import net.mcreator.starwarsexpansion.entity.EscapePodEntity;
 import net.mcreator.starwarsexpansion.entity.ATSTEntity;
 import net.mcreator.starwarsexpansion.entity.LaserProjectileEntity;
 
@@ -100,7 +99,6 @@ public class SpaceshipShootKeyOnKeyPressedProcedure {
                 StarWarsExpansionModEntities.LASER_PROJECTILE.get(), level);
         if (laser instanceof AbstractArrow arrow) {
             arrow.setBaseDamage(0.2f);
-            arrow.setKnockback(0);
             arrow.setSilent(true);
         }
 

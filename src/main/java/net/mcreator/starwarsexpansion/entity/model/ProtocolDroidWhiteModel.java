@@ -9,17 +9,17 @@ import net.mcreator.starwarsexpansion.entity.ProtocolDroidWhiteEntity;
 public class ProtocolDroidWhiteModel extends GeoModel<ProtocolDroidWhiteEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(ProtocolDroidWhiteEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "animations/protocoldroid.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "animations/protocoldroid.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(ProtocolDroidWhiteEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "geo/protocoldroid.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "geo/protocoldroid.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(ProtocolDroidWhiteEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "textures/entities/" + entity.getTexture() + ".png");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion",  "textures/entities/" + entity.getTexture() + ".png");
 	}
 
 }

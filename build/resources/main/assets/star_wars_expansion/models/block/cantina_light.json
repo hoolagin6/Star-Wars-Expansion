@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "star_wars_expansion:block/cantina_light",
-    "particle": "star_wars_expansion:block/cantina_light"
-  },
-  "render_type": "solid"
-}

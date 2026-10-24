@@ -2,6 +2,8 @@
 package net.mcreator.starwarsexpansion.block;
 
 import net.minecraft.world.level.storage.loot.LootParams;
+import com.mojang.serialization.MapCodec;
+
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -86,4 +88,9 @@ public class MoistureVaporatorBlock extends BaseEntityBlock implements EntityBlo
 			return dropsOriginal;
 		return Collections.singletonList(new ItemStack(this, 1));
 	}
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return simpleCodec(p -> new MoistureVaporatorBlock());
+	}
+
 }

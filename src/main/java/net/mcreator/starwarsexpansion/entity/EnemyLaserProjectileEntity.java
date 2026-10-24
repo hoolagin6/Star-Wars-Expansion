@@ -1,12 +1,10 @@
 
 package net.mcreator.starwarsexpansion.entity;
 
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.network.PlayMessages;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.projectile.ItemSupplier;
@@ -16,8 +14,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.util.RandomSource;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.Packet;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import net.mcreator.starwarsexpansion.procedures.LaserProjectileWhileProjectileFlyingTickProcedure;
 import net.mcreator.starwarsexpansion.init.StarWarsExpansionModItems;
@@ -27,30 +24,28 @@ import net.mcreator.starwarsexpansion.init.StarWarsExpansionModEntities;
 public class EnemyLaserProjectileEntity extends AbstractArrow implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(StarWarsExpansionModItems.KYBER_CRYSTAL_RED.get());
 
-	public EnemyLaserProjectileEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(StarWarsExpansionModEntities.ENEMY_LASER_PROJECTILE.get(), world);
-	}
 
 	public EnemyLaserProjectileEntity(EntityType<? extends EnemyLaserProjectileEntity> type, Level world) {
 		super(type, world);
 	}
 
 	public EnemyLaserProjectileEntity(EntityType<? extends EnemyLaserProjectileEntity> type, double x, double y, double z, Level world) {
-		super(type, x, y, z, world);
+		super(type, x, y, z, world, PROJECTILE_ITEM, null);
 	}
 
 	public EnemyLaserProjectileEntity(EntityType<? extends EnemyLaserProjectileEntity> type, LivingEntity entity, Level world) {
-		super(type, entity, world);
+		super(type, entity, world, PROJECTILE_ITEM, null);
 	}
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ItemStack getItem() {
+		return PROJECTILE_ITEM;
+	}
+
+	@Override
+	protected ItemStack getDefaultPickupItem() {
 		return PROJECTILE_ITEM;
 	}
 
@@ -87,9 +82,8 @@ public class EnemyLaserProjectileEntity extends AbstractArrow implements ItemSup
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
 		entityarrow.setBaseDamage(damage);
-		entityarrow.setKnockback(knockback);
 		world.addFreshEntity(entityarrow);
-		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("star_wars_expansion:blaster_shot")), SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
+		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), BuiltInRegistries.SOUND_EVENT.get(ResourceLocation.parse("star_wars_expansion:blaster_shot")), SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
 		return entityarrow;
 	}
 
@@ -101,10 +95,9 @@ public class EnemyLaserProjectileEntity extends AbstractArrow implements ItemSup
 		entityarrow.shoot(dx, dy - entityarrow.getY() + Math.hypot(dx, dz) * 0.2F, dz, 1.5f * 2, 12.0F);
 		entityarrow.setSilent(true);
 		entityarrow.setBaseDamage(1);
-		entityarrow.setKnockback(0);
 		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);
-		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("star_wars_expansion:blaster_shot")), SoundSource.PLAYERS, 1,
+		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), BuiltInRegistries.SOUND_EVENT.get(ResourceLocation.parse("star_wars_expansion:blaster_shot")), SoundSource.PLAYERS, 1,
 				1f / (RandomSource.create().nextFloat() * 0.5f + 1));
 		return entityarrow;
 	}

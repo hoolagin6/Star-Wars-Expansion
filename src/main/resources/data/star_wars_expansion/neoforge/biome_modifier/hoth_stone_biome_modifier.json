@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "star_wars_expansion:hoth_plains",
+  "features": "star_wars_expansion:hoth_stone",
+  "step": "underground_ores"
+}

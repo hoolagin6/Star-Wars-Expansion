@@ -44,12 +44,11 @@ public class Westar34ItemRenderer extends GeoItemRenderer<Westar34Item> {
 	}
 
 	@Override
-	public void actuallyRender(PoseStack matrixStackIn, Westar34Item animatable, BakedGeoModel model, RenderType type, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, boolean isRenderer, float partialTicks, int packedLightIn,
-			int packedOverlayIn, float red, float green, float blue, float alpha) {
+	public void actuallyRender(PoseStack matrixStackIn, Westar34Item animatable, BakedGeoModel model, RenderType type, MultiBufferSource renderTypeBuffer, VertexConsumer vertexBuilder, boolean isRenderer, float partialTicks, int packedLightIn, int packedOverlayIn, int color) {
 		this.currentBuffer = renderTypeBuffer;
 		this.renderType = type;
 		this.animatable = animatable;
-		super.actuallyRender(matrixStackIn, animatable, model, type, renderTypeBuffer, vertexBuilder, isRenderer, partialTicks, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+		super.actuallyRender(matrixStackIn, animatable, model, type, renderTypeBuffer, vertexBuilder, isRenderer, partialTicks, packedLightIn, packedOverlayIn, color);
 		if (this.renderArms) {
 			this.renderArms = false;
 		}

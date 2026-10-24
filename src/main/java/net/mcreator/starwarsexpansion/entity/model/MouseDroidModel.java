@@ -9,17 +9,17 @@ import net.mcreator.starwarsexpansion.entity.MouseDroidEntity;
 public class MouseDroidModel extends GeoModel<MouseDroidEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(MouseDroidEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "animations/mousedroid.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "animations/mousedroid.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(MouseDroidEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "geo/mousedroid.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "geo/mousedroid.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(MouseDroidEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "textures/entities/" + entity.getTexture() + ".png");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion",  "textures/entities/" + entity.getTexture() + ".png");
 	}
 
 }

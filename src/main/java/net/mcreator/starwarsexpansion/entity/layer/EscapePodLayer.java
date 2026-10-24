@@ -15,7 +15,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 public class EscapePodLayer extends GeoRenderLayer<EscapePodEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation("star_wars_expansion", "textures/entities/escapepod_glow.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "textures/entities/escapepod_glow.png");
 
 	public EscapePodLayer(GeoRenderer<EscapePodEntity> entityRenderer) {
 		super(entityRenderer);
@@ -24,6 +24,6 @@ public class EscapePodLayer extends GeoRenderLayer<EscapePodEntity> {
 	@Override
 	public void render(PoseStack poseStack, EscapePodEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
 		RenderType glowRenderType = RenderType.eyes(LAYER);
-		getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, glowRenderType, bufferSource.getBuffer(glowRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
+		getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, glowRenderType, bufferSource.getBuffer(glowRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 	}
 }

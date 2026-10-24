@@ -1,10 +1,8 @@
 
 package net.mcreator.starwarsexpansion.entity;
 
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.network.PlayMessages;
-import net.minecraftforge.network.NetworkHooks;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -14,7 +12,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Entity;
@@ -24,30 +21,20 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.Packet;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import net.mcreator.starwarsexpansion.procedures.BrokenEscapePodSolidBoundingBoxConditionProcedure;
 import net.mcreator.starwarsexpansion.procedures.BibFortunaRightClickedOnEntityProcedure;
-import net.mcreator.starwarsexpansion.init.StarWarsExpansionModEntities;
 
 public class BibFortunaEntity extends PathfinderMob {
-	public BibFortunaEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(StarWarsExpansionModEntities.BIB_FORTUNA.get(), world);
-	}
 
 	public BibFortunaEntity(EntityType<BibFortunaEntity> type, Level world) {
 		super(type, world);
-		setMaxUpStep(0.6f);
 		xpReward = 0;
 		setNoAi(false);
 		setPersistenceRequired();
 	}
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
 
 	@Override
 	protected void registerGoals() {
@@ -56,10 +43,6 @@ public class BibFortunaEntity extends PathfinderMob {
 		this.goalSelector.addGoal(2, new FloatGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
 
 	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
@@ -68,12 +51,12 @@ public class BibFortunaEntity extends PathfinderMob {
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.hurt"));
+		return BuiltInRegistries.SOUND_EVENT.get(ResourceLocation.parse("entity.generic.hurt"));
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.death"));
+		return BuiltInRegistries.SOUND_EVENT.get(ResourceLocation.parse("entity.generic.death"));
 	}
 
 	@Override
@@ -103,10 +86,6 @@ public class BibFortunaEntity extends PathfinderMob {
 		return super.hurt(damagesource, amount);
 	}
 
-	@Override
-	public boolean ignoreExplosion() {
-		return true;
-	}
 
 	@Override
 	public boolean fireImmune() {
@@ -155,4 +134,9 @@ public class BibFortunaEntity extends PathfinderMob {
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
 		return builder;
 	}
+	@Override
+	public float maxUpStep() {
+		return 0.6F;
+	}
+
 }

@@ -4,14 +4,16 @@
  */
 package net.mcreator.starwarsexpansion.init;
 
-import net.minecraftforge.registries.RegistryObject;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 
+import net.minecraft.world.level.block.Block;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Entity;
@@ -70,177 +72,177 @@ import net.mcreator.starwarsexpansion.entity.AncientSithLordEntity;
 import net.mcreator.starwarsexpansion.entity.ATSTEntity;
 import net.mcreator.starwarsexpansion.StarWarsExpansionMod;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class StarWarsExpansionModEntities {
-	public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, StarWarsExpansionMod.MODID);
-	public static final RegistryObject<EntityType<AstromechDroidBlueEntity>> ASTROMECH_DROID_BLUE = register("astromech_droid_blue", EntityType.Builder.<AstromechDroidBlueEntity>of(AstromechDroidBlueEntity::new, MobCategory.MONSTER)
-			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(AstromechDroidBlueEntity::new).fireImmune().sized(0.5f, 1.3f));
-	public static final RegistryObject<EntityType<ProtocolDroidGoldEntity>> PROTOCOL_DROID_GOLD = register("protocol_droid_gold", EntityType.Builder.<ProtocolDroidGoldEntity>of(ProtocolDroidGoldEntity::new, MobCategory.MONSTER)
-			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(ProtocolDroidGoldEntity::new).fireImmune().sized(0.5f, 1.8f));
-	public static final RegistryObject<EntityType<AstromechDroidRedEntity>> ASTROMECH_DROID_RED = register("astromech_droid_red", EntityType.Builder.<AstromechDroidRedEntity>of(AstromechDroidRedEntity::new, MobCategory.MONSTER)
-			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(AstromechDroidRedEntity::new).fireImmune().sized(0.5f, 1.3f));
-	public static final RegistryObject<EntityType<AstromechDroidPinkEntity>> ASTROMECH_DROID_PINK = register("astromech_droid_pink", EntityType.Builder.<AstromechDroidPinkEntity>of(AstromechDroidPinkEntity::new, MobCategory.MONSTER)
-			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(AstromechDroidPinkEntity::new).fireImmune().sized(0.5f, 1.3f));
-	public static final RegistryObject<EntityType<ProtocolDroidWhiteEntity>> PROTOCOL_DROID_WHITE = register("protocol_droid_white", EntityType.Builder.<ProtocolDroidWhiteEntity>of(ProtocolDroidWhiteEntity::new, MobCategory.MONSTER)
-			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(ProtocolDroidWhiteEntity::new).fireImmune().sized(0.5f, 1.8f));
-	public static final RegistryObject<EntityType<ProtocolDroidPinkEntity>> PROTOCOL_DROID_PINK = register("protocol_droid_pink", EntityType.Builder.<ProtocolDroidPinkEntity>of(ProtocolDroidPinkEntity::new, MobCategory.MONSTER)
-			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(ProtocolDroidPinkEntity::new).fireImmune().sized(0.5f, 1.8f));
-	public static final RegistryObject<EntityType<GonkDroidEntity>> GONK_DROID = register("gonk_droid",
-			EntityType.Builder.<GonkDroidEntity>of(GonkDroidEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(GonkDroidEntity::new).fireImmune().sized(0.6f, 2f));
-	public static final RegistryObject<EntityType<LaserProjectileEntity>> LASER_PROJECTILE = register("laser_projectile", EntityType.Builder.<LaserProjectileEntity>of(LaserProjectileEntity::new, MobCategory.MISC)
-			.setCustomClientFactory(LaserProjectileEntity::new).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.3f, 0.3f));
-	public static final RegistryObject<EntityType<MouseDroidEntity>> MOUSE_DROID = register("mouse_droid", EntityType.Builder.<MouseDroidEntity>of(MouseDroidEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64)
-			.setUpdateInterval(3).setCustomClientFactory(MouseDroidEntity::new).fireImmune().sized(0.3f, 0.6f));
-	public static final RegistryObject<EntityType<RodianGreenEntity>> RODIAN_GREEN = register("rodian_green",
-			EntityType.Builder.<RodianGreenEntity>of(RodianGreenEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(RodianGreenEntity::new)
+	public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(Registries.ENTITY_TYPE, StarWarsExpansionMod.MODID);
+	public static final DeferredHolder<EntityType<?>, EntityType<AstromechDroidBlueEntity>> ASTROMECH_DROID_BLUE = register("astromech_droid_blue", EntityType.Builder.<AstromechDroidBlueEntity>of(AstromechDroidBlueEntity::new, MobCategory.MONSTER)
+			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.5f, 1.3f));
+	public static final DeferredHolder<EntityType<?>, EntityType<ProtocolDroidGoldEntity>> PROTOCOL_DROID_GOLD = register("protocol_droid_gold", EntityType.Builder.<ProtocolDroidGoldEntity>of(ProtocolDroidGoldEntity::new, MobCategory.MONSTER)
+			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.5f, 1.8f));
+	public static final DeferredHolder<EntityType<?>, EntityType<AstromechDroidRedEntity>> ASTROMECH_DROID_RED = register("astromech_droid_red", EntityType.Builder.<AstromechDroidRedEntity>of(AstromechDroidRedEntity::new, MobCategory.MONSTER)
+			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.5f, 1.3f));
+	public static final DeferredHolder<EntityType<?>, EntityType<AstromechDroidPinkEntity>> ASTROMECH_DROID_PINK = register("astromech_droid_pink", EntityType.Builder.<AstromechDroidPinkEntity>of(AstromechDroidPinkEntity::new, MobCategory.MONSTER)
+			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.5f, 1.3f));
+	public static final DeferredHolder<EntityType<?>, EntityType<ProtocolDroidWhiteEntity>> PROTOCOL_DROID_WHITE = register("protocol_droid_white", EntityType.Builder.<ProtocolDroidWhiteEntity>of(ProtocolDroidWhiteEntity::new, MobCategory.MONSTER)
+			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.5f, 1.8f));
+	public static final DeferredHolder<EntityType<?>, EntityType<ProtocolDroidPinkEntity>> PROTOCOL_DROID_PINK = register("protocol_droid_pink", EntityType.Builder.<ProtocolDroidPinkEntity>of(ProtocolDroidPinkEntity::new, MobCategory.MONSTER)
+			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.5f, 1.8f));
+	public static final DeferredHolder<EntityType<?>, EntityType<GonkDroidEntity>> GONK_DROID = register("gonk_droid",
+			EntityType.Builder.<GonkDroidEntity>of(GonkDroidEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.6f, 2f));
+	public static final DeferredHolder<EntityType<?>, EntityType<LaserProjectileEntity>> LASER_PROJECTILE = register("laser_projectile", EntityType.Builder.<LaserProjectileEntity>of(LaserProjectileEntity::new, MobCategory.MISC)
+			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.3f, 0.3f));
+	public static final DeferredHolder<EntityType<?>, EntityType<MouseDroidEntity>> MOUSE_DROID = register("mouse_droid", EntityType.Builder.<MouseDroidEntity>of(MouseDroidEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64)
+			.setUpdateInterval(3).fireImmune().sized(0.3f, 0.6f));
+	public static final DeferredHolder<EntityType<?>, EntityType<RodianGreenEntity>> RODIAN_GREEN = register("rodian_green",
+			EntityType.Builder.<RodianGreenEntity>of(RodianGreenEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<RodianBlueEntity>> RODIAN_BLUE = register("rodian_blue",
-			EntityType.Builder.<RodianBlueEntity>of(RodianBlueEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(RodianBlueEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<RodianBlueEntity>> RODIAN_BLUE = register("rodian_blue",
+			EntityType.Builder.<RodianBlueEntity>of(RodianBlueEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<RodianRedEntity>> RODIAN_RED = register("rodian_red",
-			EntityType.Builder.<RodianRedEntity>of(RodianRedEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(RodianRedEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<RodianRedEntity>> RODIAN_RED = register("rodian_red",
+			EntityType.Builder.<RodianRedEntity>of(RodianRedEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<RodianDefaultEntity>> RODIAN_DEFAULT = register("rodian_default",
-			EntityType.Builder.<RodianDefaultEntity>of(RodianDefaultEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(RodianDefaultEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<RodianDefaultEntity>> RODIAN_DEFAULT = register("rodian_default",
+			EntityType.Builder.<RodianDefaultEntity>of(RodianDefaultEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<IthorianEntity>> ITHORIAN = register("ithorian",
-			EntityType.Builder.<IthorianEntity>of(IthorianEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(IthorianEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<IthorianEntity>> ITHORIAN = register("ithorian",
+			EntityType.Builder.<IthorianEntity>of(IthorianEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<JawaEntity>> JAWA = register("jawa",
-			EntityType.Builder.<JawaEntity>of(JawaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(JawaEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<JawaEntity>> JAWA = register("jawa",
+			EntityType.Builder.<JawaEntity>of(JawaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.2f));
-	public static final RegistryObject<EntityType<TwiLekBlueEntity>> TWI_LEK_BLUE = register("twi_lek_blue",
-			EntityType.Builder.<TwiLekBlueEntity>of(TwiLekBlueEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(TwiLekBlueEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<TwiLekBlueEntity>> TWI_LEK_BLUE = register("twi_lek_blue",
+			EntityType.Builder.<TwiLekBlueEntity>of(TwiLekBlueEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<TwiLekOrangeEntity>> TWI_LEK_ORANGE = register("twi_lek_orange",
-			EntityType.Builder.<TwiLekOrangeEntity>of(TwiLekOrangeEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(TwiLekOrangeEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<TwiLekOrangeEntity>> TWI_LEK_ORANGE = register("twi_lek_orange",
+			EntityType.Builder.<TwiLekOrangeEntity>of(TwiLekOrangeEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<TwiLekPinkEntity>> TWI_LEK_PINK = register("twi_lek_pink",
-			EntityType.Builder.<TwiLekPinkEntity>of(TwiLekPinkEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(TwiLekPinkEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<TwiLekPinkEntity>> TWI_LEK_PINK = register("twi_lek_pink",
+			EntityType.Builder.<TwiLekPinkEntity>of(TwiLekPinkEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<TwiLekDefaultEntity>> TWI_LEK_DEFAULT = register("twi_lek_default",
-			EntityType.Builder.<TwiLekDefaultEntity>of(TwiLekDefaultEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(TwiLekDefaultEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<TwiLekDefaultEntity>> TWI_LEK_DEFAULT = register("twi_lek_default",
+			EntityType.Builder.<TwiLekDefaultEntity>of(TwiLekDefaultEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<TuskenRaiderEntity>> TUSKEN_RAIDER = register("tusken_raider",
-			EntityType.Builder.<TuskenRaiderEntity>of(TuskenRaiderEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(TuskenRaiderEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<TuskenRaiderEntity>> TUSKEN_RAIDER = register("tusken_raider",
+			EntityType.Builder.<TuskenRaiderEntity>of(TuskenRaiderEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<BanthaEntity>> BANTHA = register("bantha",
-			EntityType.Builder.<BanthaEntity>of(BanthaEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(BanthaEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<BanthaEntity>> BANTHA = register("bantha",
+			EntityType.Builder.<BanthaEntity>of(BanthaEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(2f, 2f));
-	public static final RegistryObject<EntityType<BattleDroidEntity>> BATTLE_DROID = register("battle_droid",
-			EntityType.Builder.<BattleDroidEntity>of(BattleDroidEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(BattleDroidEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<BattleDroidEntity>> BATTLE_DROID = register("battle_droid",
+			EntityType.Builder.<BattleDroidEntity>of(BattleDroidEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<EnemyLaserProjectileEntity>> ENEMY_LASER_PROJECTILE = register("enemy_laser_projectile", EntityType.Builder.<EnemyLaserProjectileEntity>of(EnemyLaserProjectileEntity::new, MobCategory.MISC)
-			.setCustomClientFactory(EnemyLaserProjectileEntity::new).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.2f, 0.2f));
-	public static final RegistryObject<EntityType<KryknaEntity>> KRYKNA = register("krykna",
-			EntityType.Builder.<KryknaEntity>of(KryknaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(KryknaEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<EnemyLaserProjectileEntity>> ENEMY_LASER_PROJECTILE = register("enemy_laser_projectile", EntityType.Builder.<EnemyLaserProjectileEntity>of(EnemyLaserProjectileEntity::new, MobCategory.MISC)
+			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.2f, 0.2f));
+	public static final DeferredHolder<EntityType<?>, EntityType<KryknaEntity>> KRYKNA = register("krykna",
+			EntityType.Builder.<KryknaEntity>of(KryknaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.2f));
-	public static final RegistryObject<EntityType<ArgesFrogEntity>> ARGES_FROG = register("arges_frog",
-			EntityType.Builder.<ArgesFrogEntity>of(ArgesFrogEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(ArgesFrogEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<ArgesFrogEntity>> ARGES_FROG = register("arges_frog",
+			EntityType.Builder.<ArgesFrogEntity>of(ArgesFrogEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<HumanEntity>> HUMAN = register("human",
-			EntityType.Builder.<HumanEntity>of(HumanEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(HumanEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<HumanEntity>> HUMAN = register("human",
+			EntityType.Builder.<HumanEntity>of(HumanEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<LandspeederEntity>> LANDSPEEDER = register("landspeeder", EntityType.Builder.<LandspeederEntity>of(LandspeederEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
-			.setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(LandspeederEntity::new).fireImmune().sized(2f, 0.8f));
-	public static final RegistryObject<EntityType<XWingEntity>> X_WING = register("x_wing",
-			EntityType.Builder.<XWingEntity>of(XWingEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(XWingEntity::new).fireImmune().sized(6f, 2f));
-	public static final RegistryObject<EntityType<T3M4Entity>> T_3_M_4 = register("t_3_m_4",
-			EntityType.Builder.<T3M4Entity>of(T3M4Entity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(T3M4Entity::new).fireImmune().sized(0.5f, 1.3f));
-	public static final RegistryObject<EntityType<SpeederBikeEntity>> SPEEDER_BIKE = register("speeder_bike", EntityType.Builder.<SpeederBikeEntity>of(SpeederBikeEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
-			.setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(SpeederBikeEntity::new).fireImmune().sized(2f, 0.8f));
-	public static final RegistryObject<EntityType<TIEFighterEntity>> TIE_FIGHTER = register("tie_fighter", EntityType.Builder.<TIEFighterEntity>of(TIEFighterEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64)
-			.setUpdateInterval(3).setCustomClientFactory(TIEFighterEntity::new).fireImmune().sized(2f, 4.5f));
-	public static final RegistryObject<EntityType<EscapePodEntity>> ESCAPE_POD = register("escape_pod",
-			EntityType.Builder.<EscapePodEntity>of(EscapePodEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(EscapePodEntity::new).fireImmune().sized(2f, 6f));
-	public static final RegistryObject<EntityType<BrokenEscapePodEntity>> BROKEN_ESCAPE_POD = register("broken_escape_pod", EntityType.Builder.<BrokenEscapePodEntity>of(BrokenEscapePodEntity::new, MobCategory.MONSTER)
-			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(BrokenEscapePodEntity::new).fireImmune().sized(3f, 2f));
-	public static final RegistryObject<EntityType<ATSTEntity>> ATST = register("atst",
-			EntityType.Builder.<ATSTEntity>of(ATSTEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(ATSTEntity::new).fireImmune().sized(3f, 9f));
-	public static final RegistryObject<EntityType<SnowspeederEntity>> SNOWSPEEDER = register("snowspeeder", EntityType.Builder.<SnowspeederEntity>of(SnowspeederEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
-			.setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(SnowspeederEntity::new).fireImmune().sized(6f, 2f));
-	public static final RegistryObject<EntityType<TauntaunEntity>> TAUNTAUN = register("tauntaun",
-			EntityType.Builder.<TauntaunEntity>of(TauntaunEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(TauntaunEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<LandspeederEntity>> LANDSPEEDER = register("landspeeder", EntityType.Builder.<LandspeederEntity>of(LandspeederEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
+			.setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(2f, 0.8f));
+	public static final DeferredHolder<EntityType<?>, EntityType<XWingEntity>> X_WING = register("x_wing",
+			EntityType.Builder.<XWingEntity>of(XWingEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(6f, 2f));
+	public static final DeferredHolder<EntityType<?>, EntityType<T3M4Entity>> T_3_M_4 = register("t_3_m_4",
+			EntityType.Builder.<T3M4Entity>of(T3M4Entity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.5f, 1.3f));
+	public static final DeferredHolder<EntityType<?>, EntityType<SpeederBikeEntity>> SPEEDER_BIKE = register("speeder_bike", EntityType.Builder.<SpeederBikeEntity>of(SpeederBikeEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
+			.setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(2f, 0.8f));
+	public static final DeferredHolder<EntityType<?>, EntityType<TIEFighterEntity>> TIE_FIGHTER = register("tie_fighter", EntityType.Builder.<TIEFighterEntity>of(TIEFighterEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64)
+			.setUpdateInterval(3).fireImmune().sized(2f, 4.5f));
+	public static final DeferredHolder<EntityType<?>, EntityType<EscapePodEntity>> ESCAPE_POD = register("escape_pod",
+			EntityType.Builder.<EscapePodEntity>of(EscapePodEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(2f, 6f));
+	public static final DeferredHolder<EntityType<?>, EntityType<BrokenEscapePodEntity>> BROKEN_ESCAPE_POD = register("broken_escape_pod", EntityType.Builder.<BrokenEscapePodEntity>of(BrokenEscapePodEntity::new, MobCategory.MONSTER)
+			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(3f, 2f));
+	public static final DeferredHolder<EntityType<?>, EntityType<ATSTEntity>> ATST = register("atst",
+			EntityType.Builder.<ATSTEntity>of(ATSTEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(3f, 9f));
+	public static final DeferredHolder<EntityType<?>, EntityType<SnowspeederEntity>> SNOWSPEEDER = register("snowspeeder", EntityType.Builder.<SnowspeederEntity>of(SnowspeederEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
+			.setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(6f, 2f));
+	public static final DeferredHolder<EntityType<?>, EntityType<TauntaunEntity>> TAUNTAUN = register("tauntaun",
+			EntityType.Builder.<TauntaunEntity>of(TauntaunEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(1f, 2f));
-	public static final RegistryObject<EntityType<TauntaunSaddleEntity>> TAUNTAUN_SADDLE = register("tauntaun_saddle",
-			EntityType.Builder.<TauntaunSaddleEntity>of(TauntaunSaddleEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(TauntaunSaddleEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<TauntaunSaddleEntity>> TAUNTAUN_SADDLE = register("tauntaun_saddle",
+			EntityType.Builder.<TauntaunSaddleEntity>of(TauntaunSaddleEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(1f, 2f));
-	public static final RegistryObject<EntityType<GamorreanEntity>> GAMORREAN = register("gamorrean",
-			EntityType.Builder.<GamorreanEntity>of(GamorreanEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(GamorreanEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<GamorreanEntity>> GAMORREAN = register("gamorrean",
+			EntityType.Builder.<GamorreanEntity>of(GamorreanEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<HuttEntity>> HUTT = register("hutt",
-			EntityType.Builder.<HuttEntity>of(HuttEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(HuttEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<HuttEntity>> HUTT = register("hutt",
+			EntityType.Builder.<HuttEntity>of(HuttEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(1f, 2.6f));
-	public static final RegistryObject<EntityType<PirateLizardEntity>> PIRATE_LIZARD = register("pirate_lizard",
-			EntityType.Builder.<PirateLizardEntity>of(PirateLizardEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(PirateLizardEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<PirateLizardEntity>> PIRATE_LIZARD = register("pirate_lizard",
+			EntityType.Builder.<PirateLizardEntity>of(PirateLizardEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<PirateHumanEntity>> PIRATE_HUMAN = register("pirate_human",
-			EntityType.Builder.<PirateHumanEntity>of(PirateHumanEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(PirateHumanEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<PirateHumanEntity>> PIRATE_HUMAN = register("pirate_human",
+			EntityType.Builder.<PirateHumanEntity>of(PirateHumanEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<PirateWestEntity>> PIRATE_WEST = register("pirate_west",
-			EntityType.Builder.<PirateWestEntity>of(PirateWestEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(PirateWestEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<PirateWestEntity>> PIRATE_WEST = register("pirate_west",
+			EntityType.Builder.<PirateWestEntity>of(PirateWestEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<PirateEntity>> PIRATE = register("pirate",
-			EntityType.Builder.<PirateEntity>of(PirateEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(PirateEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<PirateEntity>> PIRATE = register("pirate",
+			EntityType.Builder.<PirateEntity>of(PirateEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<EwokEntity>> EWOK = register("ewok",
-			EntityType.Builder.<EwokEntity>of(EwokEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(EwokEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<EwokEntity>> EWOK = register("ewok",
+			EntityType.Builder.<EwokEntity>of(EwokEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.6f));
-	public static final RegistryObject<EntityType<PorgEntity>> PORG = register("porg",
-			EntityType.Builder.<PorgEntity>of(PorgEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(PorgEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<PorgEntity>> PORG = register("porg",
+			EntityType.Builder.<PorgEntity>of(PorgEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.4f, 0.7f));
-	public static final RegistryObject<EntityType<BallDroidEntity>> BALL_DROID = register("ball_droid",
-			EntityType.Builder.<BallDroidEntity>of(BallDroidEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(BallDroidEntity::new).fireImmune().sized(0.5f, 1f));
-	public static final RegistryObject<EntityType<AncientSithLordEntity>> ANCIENT_SITH_LORD = register("ancient_sith_lord", EntityType.Builder.<AncientSithLordEntity>of(AncientSithLordEntity::new, MobCategory.MONSTER)
-			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(AncientSithLordEntity::new).fireImmune().sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<CantinaBandEntity>> CANTINA_BAND = register("cantina_band",
-			EntityType.Builder.<CantinaBandEntity>of(CantinaBandEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(CantinaBandEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<BallDroidEntity>> BALL_DROID = register("ball_droid",
+			EntityType.Builder.<BallDroidEntity>of(BallDroidEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.5f, 1f));
+	public static final DeferredHolder<EntityType<?>, EntityType<AncientSithLordEntity>> ANCIENT_SITH_LORD = register("ancient_sith_lord", EntityType.Builder.<AncientSithLordEntity>of(AncientSithLordEntity::new, MobCategory.MONSTER)
+			.setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).fireImmune().sized(0.6f, 1.8f));
+	public static final DeferredHolder<EntityType<?>, EntityType<CantinaBandEntity>> CANTINA_BAND = register("cantina_band",
+			EntityType.Builder.<CantinaBandEntity>of(CantinaBandEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<BrainWalkerEntity>> BRAIN_WALKER = register("brain_walker",
-			EntityType.Builder.<BrainWalkerEntity>of(BrainWalkerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(BrainWalkerEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<BrainWalkerEntity>> BRAIN_WALKER = register("brain_walker",
+			EntityType.Builder.<BrainWalkerEntity>of(BrainWalkerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.2f));
-	public static final RegistryObject<EntityType<WampaEntity>> WAMPA = register("wampa",
-			EntityType.Builder.<WampaEntity>of(WampaEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(WampaEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<WampaEntity>> WAMPA = register("wampa",
+			EntityType.Builder.<WampaEntity>of(WampaEntity::new, MobCategory.CREATURE).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 3f));
-	public static final RegistryObject<EntityType<SkiffGuardEntity>> SKIFF_GUARD = register("skiff_guard",
-			EntityType.Builder.<SkiffGuardEntity>of(SkiffGuardEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(SkiffGuardEntity::new)
+	public static final DeferredHolder<EntityType<?>, EntityType<SkiffGuardEntity>> SKIFF_GUARD = register("skiff_guard",
+			EntityType.Builder.<SkiffGuardEntity>of(SkiffGuardEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3)
 
 					.sized(0.6f, 1.8f));
-	public static final RegistryObject<EntityType<BibFortunaEntity>> BIB_FORTUNA = register("bib_fortuna", EntityType.Builder.<BibFortunaEntity>of(BibFortunaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64)
-			.setUpdateInterval(3).setCustomClientFactory(BibFortunaEntity::new).fireImmune().sized(0.6f, 1.8f));
+	public static final DeferredHolder<EntityType<?>, EntityType<BibFortunaEntity>> BIB_FORTUNA = register("bib_fortuna", EntityType.Builder.<BibFortunaEntity>of(BibFortunaEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64)
+			.setUpdateInterval(3).fireImmune().sized(0.6f, 1.8f));
 
 	// Start of user code block custom entities
 	// End of user code block custom entities
-	private static <T extends Entity> RegistryObject<EntityType<T>> register(String registryname, EntityType.Builder<T> entityTypeBuilder) {
+	private static <T extends Entity> DeferredHolder<EntityType<?>, EntityType<T>> register(String registryname, EntityType.Builder<T> entityTypeBuilder) {
 		return REGISTRY.register(registryname, () -> (EntityType<T>) entityTypeBuilder.build(registryname));
 	}
 

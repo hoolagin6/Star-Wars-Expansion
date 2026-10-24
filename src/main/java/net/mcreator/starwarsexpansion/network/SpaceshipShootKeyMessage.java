@@ -1,23 +1,34 @@
-
 package net.mcreator.starwarsexpansion.network;
 
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 
 import net.mcreator.starwarsexpansion.procedures.SpaceshipShootKeyOnKeyReleasedProcedure;
 import net.mcreator.starwarsexpansion.procedures.SpaceshipShootKeyOnKeyPressedProcedure;
 import net.mcreator.starwarsexpansion.StarWarsExpansionMod;
 
-import java.util.function.Supplier;
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+public class SpaceshipShootKeyMessage implements CustomPacketPayload {
+	public static final CustomPacketPayload.Type<SpaceshipShootKeyMessage> TYPE = new CustomPacketPayload.Type<>(
+			ResourceLocation.fromNamespaceAndPath(StarWarsExpansionMod.MODID, "spaceship_shoot_key"));
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class SpaceshipShootKeyMessage {
+	public static final StreamCodec<FriendlyByteBuf, SpaceshipShootKeyMessage> STREAM_CODEC = StreamCodec.of(
+			(buffer, message) -> {
+				buffer.writeVarInt(message.type);
+				buffer.writeVarInt(message.pressedms);
+			},
+			buffer -> new SpaceshipShootKeyMessage(buffer.readVarInt(), buffer.readVarInt()));
+
 	int type, pressedms;
 
 	public SpaceshipShootKeyMessage(int type, int pressedms) {
@@ -25,22 +36,15 @@ public class SpaceshipShootKeyMessage {
 		this.pressedms = pressedms;
 	}
 
-	public SpaceshipShootKeyMessage(FriendlyByteBuf buffer) {
-		this.type = buffer.readInt();
-		this.pressedms = buffer.readInt();
+	@Override
+	public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+		return TYPE;
 	}
 
-	public static void buffer(SpaceshipShootKeyMessage message, FriendlyByteBuf buffer) {
-		buffer.writeInt(message.type);
-		buffer.writeInt(message.pressedms);
-	}
-
-	public static void handler(SpaceshipShootKeyMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-		NetworkEvent.Context context = contextSupplier.get();
+	public static void handle(SpaceshipShootKeyMessage message, IPayloadContext context) {
 		context.enqueueWork(() -> {
-			pressAction(context.getSender(), message.type, message.pressedms);
+			pressAction(context.player(), message.type, message.pressedms);
 		});
-		context.setPacketHandled(true);
 	}
 
 	public static void pressAction(Player entity, int type, int pressedms) {
@@ -62,7 +66,8 @@ public class SpaceshipShootKeyMessage {
 	}
 
 	@SubscribeEvent
-	public static void registerMessage(FMLCommonSetupEvent event) {
-		StarWarsExpansionMod.addNetworkMessage(SpaceshipShootKeyMessage.class, SpaceshipShootKeyMessage::buffer, SpaceshipShootKeyMessage::new, SpaceshipShootKeyMessage::handler);
+	public static void register(RegisterPayloadHandlersEvent event) {
+		event.registrar("1").playToServer(SpaceshipShootKeyMessage.TYPE, SpaceshipShootKeyMessage.STREAM_CODEC,
+				SpaceshipShootKeyMessage::handle);
 	}
 }

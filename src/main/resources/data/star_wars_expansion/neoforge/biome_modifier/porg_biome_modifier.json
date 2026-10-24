@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": "star_wars_expansion:endor_forest",
+  "spawners": {
+    "type": "star_wars_expansion:porg",
+    "weight": 1,
+    "minCount": 2,
+    "maxCount": 2
+  }
+}

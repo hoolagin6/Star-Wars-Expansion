@@ -1,0 +1,8 @@
+{
+  "comparator_output": 9,
+  "description": {
+    "translate": "jukebox_song.star_wars_expansion.cantina_music"
+  },
+  "length_in_seconds": 240.0,
+  "sound_event": "star_wars_expansion:cantina_music"
+}

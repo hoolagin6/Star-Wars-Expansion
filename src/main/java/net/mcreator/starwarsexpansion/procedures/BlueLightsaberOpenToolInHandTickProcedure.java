@@ -1,18 +1,14 @@
 package net.mcreator.starwarsexpansion.procedures;
 
-import net.minecraftforge.network.NetworkDirection;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.Connection;
 
-import net.mcreator.starwarsexpansion.StarWarsExpansionMod;
 
-import java.util.List;
-import java.util.Iterator;
 
 public class BlueLightsaberOpenToolInHandTickProcedure {
 	public static void execute(LevelAccessor world, Entity entity) {
@@ -23,15 +19,7 @@ public class BlueLightsaberOpenToolInHandTickProcedure {
 		}
 		if (!world.isClientSide()) {
 			if (entity instanceof Player && world instanceof ServerLevel srvLvl_) {
-				List<Connection> connections = srvLvl_.getServer().getConnection().getConnections();
-				synchronized (connections) {
-					Iterator<Connection> iterator = connections.iterator();
-					while (iterator.hasNext()) {
-						Connection connection = iterator.next();
-						if (!connection.isConnecting() && connection.isConnected())
-							StarWarsExpansionMod.PACKET_HANDLER.sendTo(new SetupAnimationsProcedure.StarWarsExpansionModAnimationMessage(Component.literal("saberpose"), entity.getId(), true), connection, NetworkDirection.PLAY_TO_CLIENT);
-					}
-				}
+					PacketDistributor.sendToAllPlayers(new SetupAnimationsProcedure.StarWarsExpansionModAnimationMessage("saberpose", entity.getId(), true));
 			}
 		}
 	}

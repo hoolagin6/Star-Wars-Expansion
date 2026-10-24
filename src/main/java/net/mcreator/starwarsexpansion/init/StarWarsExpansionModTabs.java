@@ -4,11 +4,12 @@
  */
 package net.mcreator.starwarsexpansion.init;
 
-import net.minecraftforge.registries.RegistryObject;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -18,10 +19,10 @@ import net.minecraft.core.registries.Registries;
 
 import net.mcreator.starwarsexpansion.StarWarsExpansionMod;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class StarWarsExpansionModTabs {
 	public static final DeferredRegister<CreativeModeTab> REGISTRY = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, StarWarsExpansionMod.MODID);
-	public static final RegistryObject<CreativeModeTab> FORCE_TAB = REGISTRY.register("force_tab",
+	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> FORCE_TAB = REGISTRY.register("force_tab",
 			() -> CreativeModeTab.builder().title(Component.translatable("item_group.star_wars_expansion.force_tab")).icon(() -> new ItemStack(StarWarsExpansionModItems.BROWN_JEDI_CLOTHES_CHESTPLATE.get())).displayItems((parameters, tabData) -> {
 				tabData.accept(StarWarsExpansionModItems.BROWN_JEDI_CLOTHES_CHESTPLATE.get());
 				tabData.accept(StarWarsExpansionModItems.GRAY_JEDI_CLOTHES_CHESTPLATE.get());
@@ -48,7 +49,7 @@ public class StarWarsExpansionModTabs {
 				tabData.accept(StarWarsExpansionModItems.PURPLE_DOUBLE_LIGHTSABER_CLOSED.get());
 				tabData.accept(StarWarsExpansionModItems.ANCIENT_SITH_LORD_MASK_HELMET.get());
 			}).build());
-	public static final RegistryObject<CreativeModeTab> TROOPER_TAB = REGISTRY.register("trooper_tab",
+	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TROOPER_TAB = REGISTRY.register("trooper_tab",
 			() -> CreativeModeTab.builder().title(Component.translatable("item_group.star_wars_expansion.trooper_tab")).icon(() -> new ItemStack(StarWarsExpansionModItems.CLONE_ARMOR_HELMET.get())).displayItems((parameters, tabData) -> {
 				tabData.accept(StarWarsExpansionModItems.CLONE_ARMOR_HELMET.get());
 				tabData.accept(StarWarsExpansionModItems.CLONE_ARMOR_CHESTPLATE.get());
@@ -88,7 +89,7 @@ public class StarWarsExpansionModTabs {
 				tabData.accept(StarWarsExpansionModItems.SKIFF_ARMOR_CHESTPLATE.get());
 				tabData.accept(StarWarsExpansionModItems.SKIFF_ARMOR_LEGGINGS.get());
 			}).withTabsBefore(FORCE_TAB.getId()).build());
-	public static final RegistryObject<CreativeModeTab> ITEMS_TAB = REGISTRY.register("items_tab",
+	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> ITEMS_TAB = REGISTRY.register("items_tab",
 			() -> CreativeModeTab.builder().title(Component.translatable("item_group.star_wars_expansion.items_tab")).icon(() -> new ItemStack(StarWarsExpansionModItems.DOONIUM_INGOT.get())).displayItems((parameters, tabData) -> {
 				tabData.accept(StarWarsExpansionModItems.DOONIUM_INGOT.get());
 				tabData.accept(StarWarsExpansionModItems.SABER_HANDLE.get());
@@ -119,7 +120,7 @@ public class StarWarsExpansionModTabs {
 				tabData.accept(StarWarsExpansionModItems.COOKED_PORG.get());
 				tabData.accept(StarWarsExpansionModItems.CANTINA_MUSIC.get());
 			}).withTabsBefore(TROOPER_TAB.getId()).build());
-	public static final RegistryObject<CreativeModeTab> DROID_TAB = REGISTRY.register("droid_tab",
+	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> DROID_TAB = REGISTRY.register("droid_tab",
 			() -> CreativeModeTab.builder().title(Component.translatable("item_group.star_wars_expansion.droid_tab")).icon(() -> new ItemStack(StarWarsExpansionModItems.R_2_D_2.get())).displayItems((parameters, tabData) -> {
 				tabData.accept(StarWarsExpansionModItems.R_2_D_2.get());
 				tabData.accept(StarWarsExpansionModItems.C_3_PO.get());
@@ -133,7 +134,7 @@ public class StarWarsExpansionModTabs {
 				tabData.accept(StarWarsExpansionModItems.T_3_M_4_ITEM.get());
 				tabData.accept(StarWarsExpansionModItems.BB_8.get());
 			}).withTabsBefore(ITEMS_TAB.getId()).build());
-	public static final RegistryObject<CreativeModeTab> VEHICLES_TAB = REGISTRY.register("vehicles_tab",
+	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> VEHICLES_TAB = REGISTRY.register("vehicles_tab",
 			() -> CreativeModeTab.builder().title(Component.translatable("item_group.star_wars_expansion.vehicles_tab")).icon(() -> new ItemStack(StarWarsExpansionModItems.LANDSPEEDER_ITEM.get())).displayItems((parameters, tabData) -> {
 				tabData.accept(StarWarsExpansionModItems.LANDSPEEDER_ITEM.get());
 				tabData.accept(StarWarsExpansionModItems.X_WING_ITEM.get());

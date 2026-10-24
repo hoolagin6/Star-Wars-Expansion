@@ -1,8 +1,9 @@
 package net.mcreator.starwarsexpansion.procedures;
 
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -20,20 +21,18 @@ import net.mcreator.starwarsexpansion.entity.ATSTEntity;
 
 import javax.annotation.Nullable;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber
 public class SpaceshipInvisibleConditionProcedure {
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            execute(event, event.player);
-        }
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        execute(event, event.getEntity());
     }
 
     public static void execute(Entity entity) {
         execute(null, entity);
     }
 
-    private static void execute(@Nullable TickEvent event, Entity entity) {
+    private static void execute(@Nullable PlayerTickEvent.Post event, Entity entity) {
         if (entity == null)
             return;
 

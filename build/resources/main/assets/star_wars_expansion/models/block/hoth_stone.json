@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "star_wars_expansion:block/hoth_stone",
-    "particle": "star_wars_expansion:block/hoth_stone"
-  },
-  "render_type": "cutout_mipped"
-}

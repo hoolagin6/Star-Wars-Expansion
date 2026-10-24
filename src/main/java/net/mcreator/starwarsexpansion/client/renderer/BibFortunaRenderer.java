@@ -15,6 +15,6 @@ public class BibFortunaRenderer extends MobRenderer<BibFortunaEntity, Modelbibfo
 
 	@Override
 	public ResourceLocation getTextureLocation(BibFortunaEntity entity) {
-		return new ResourceLocation("star_wars_expansion:textures/entities/bib_fortuna.png");
+		return ResourceLocation.parse("star_wars_expansion:textures/entities/bib_fortuna.png");
 	}
 }

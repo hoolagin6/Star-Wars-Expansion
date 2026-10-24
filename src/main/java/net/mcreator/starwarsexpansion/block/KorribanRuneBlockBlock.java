@@ -1,7 +1,6 @@
 
 package net.mcreator.starwarsexpansion.block;
 
-import net.minecraftforge.common.IPlantable;
 
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -49,8 +48,4 @@ public class KorribanRuneBlockBlock extends Block {
 		return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
 	}
 
-	@Override
-	public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction direction, IPlantable plantable) {
-		return true;
-	}
 }

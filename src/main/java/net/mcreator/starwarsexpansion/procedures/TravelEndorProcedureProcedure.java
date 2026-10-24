@@ -2,7 +2,6 @@ package net.mcreator.starwarsexpansion.procedures;
 
 import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +22,7 @@ public class TravelEndorProcedureProcedure {
 		if (entity.isPassenger() && entity instanceof ServerPlayer _player && !_player.level().isClientSide()) {
 			Entity vehicle = entity.getVehicle();
 			if (vehicle != null) {
-				ResourceKey<Level> destinationType = ResourceKey.create(Registries.DIMENSION, new ResourceLocation("star_wars_expansion:endor"));
+				ResourceKey<Level> destinationType = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse("star_wars_expansion:endor"));
 				if (_player.level().dimension() == destinationType)
 					return;
 
@@ -38,7 +37,7 @@ public class TravelEndorProcedureProcedure {
 						_player.teleportTo(nextLevel, _player.getX(), _player.getY(), _player.getZ(), _player.getYRot(), _player.getXRot());
 						_player.connection.send(new ClientboundPlayerAbilitiesPacket(_player.getAbilities()));
 						for (MobEffectInstance _effectinstance : _player.getActiveEffects())
-							_player.connection.send(new ClientboundUpdateMobEffectPacket(_player.getId(), _effectinstance));
+							_player.connection.send(new ClientboundUpdateMobEffectPacket(_player.getId(), _effectinstance, true));
 						_player.connection.send(new ClientboundLevelEventPacket(1032, BlockPos.ZERO, 0, false));
 
 						_player.startRiding(newVehicle, true);

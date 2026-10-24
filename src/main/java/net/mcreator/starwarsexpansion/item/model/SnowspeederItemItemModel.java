@@ -9,16 +9,16 @@ import net.mcreator.starwarsexpansion.item.SnowspeederItemItem;
 public class SnowspeederItemItemModel extends GeoModel<SnowspeederItemItem> {
 	@Override
 	public ResourceLocation getAnimationResource(SnowspeederItemItem animatable) {
-		return new ResourceLocation("star_wars_expansion", "animations/snowspeeder.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "animations/snowspeeder.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(SnowspeederItemItem animatable) {
-		return new ResourceLocation("star_wars_expansion", "geo/snowspeeder.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "geo/snowspeeder.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(SnowspeederItemItem animatable) {
-		return new ResourceLocation("star_wars_expansion", "textures/item/snowspeeder.png");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "textures/item/snowspeeder.png");
 	}
 }

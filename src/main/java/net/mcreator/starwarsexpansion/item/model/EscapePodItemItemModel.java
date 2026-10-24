@@ -9,16 +9,16 @@ import net.mcreator.starwarsexpansion.item.EscapePodItemItem;
 public class EscapePodItemItemModel extends GeoModel<EscapePodItemItem> {
 	@Override
 	public ResourceLocation getAnimationResource(EscapePodItemItem animatable) {
-		return new ResourceLocation("star_wars_expansion", "animations/pod.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "animations/pod.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(EscapePodItemItem animatable) {
-		return new ResourceLocation("star_wars_expansion", "geo/pod.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "geo/pod.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(EscapePodItemItem animatable) {
-		return new ResourceLocation("star_wars_expansion", "textures/item/escapepod.png");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "textures/item/escapepod.png");
 	}
 }

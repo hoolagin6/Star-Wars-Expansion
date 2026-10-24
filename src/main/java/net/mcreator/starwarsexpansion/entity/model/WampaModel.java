@@ -1,9 +1,9 @@
 package net.mcreator.starwarsexpansion.entity.model;
 
+import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.model.data.EntityModelData;
 import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.animation.AnimationState;
 import software.bernie.geckolib.constant.DataTickets;
 
 import net.minecraft.util.Mth;
@@ -14,22 +14,22 @@ import net.mcreator.starwarsexpansion.entity.WampaEntity;
 public class WampaModel extends GeoModel<WampaEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(WampaEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "animations/wampa.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "animations/wampa.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(WampaEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "geo/wampa.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "geo/wampa.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(WampaEntity entity) {
-		return new ResourceLocation("star_wars_expansion", "textures/entities/" + entity.getTexture() + ".png");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion",  "textures/entities/" + entity.getTexture() + ".png");
 	}
 
 	@Override
 	public void setCustomAnimations(WampaEntity animatable, long instanceId, AnimationState animationState) {
-		CoreGeoBone head = getAnimationProcessor().getBone("head");
+		GeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 			head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);

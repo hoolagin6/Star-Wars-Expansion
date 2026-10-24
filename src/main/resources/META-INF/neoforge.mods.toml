@@ -1,0 +1,43 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="star_wars_expansion"
+version="3.1.0"
+displayName="Star Wars Expansion"
+displayURL="https://www.curseforge.com/members/mrfazcraft/projects"
+logoFile="logo.png"
+credits="https://www.curseforge.com/members/mrfazcraft/projects"
+authors="FazBrick Studios"
+description='''
+Star Wars inside Minecraft. Ships, weapons, droids, enemies and new planets to explore.
+'''
+
+[[dependencies.star_wars_expansion]]
+    modId="minecraft"
+    type="required"
+    versionRange="[1.21.1]"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.star_wars_expansion]]
+    modId="neoforge"
+    type="required"
+    versionRange="[21.1,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.star_wars_expansion]]
+    modId="geckolib"
+    type="required"
+    versionRange="[4.6,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.star_wars_expansion]]
+    modId="player_animation_library"
+    type="required"
+    versionRange="[1.1,)"
+    ordering="AFTER"
+    side="BOTH"

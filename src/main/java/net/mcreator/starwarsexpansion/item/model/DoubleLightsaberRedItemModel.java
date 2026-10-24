@@ -9,16 +9,16 @@ import net.mcreator.starwarsexpansion.item.DoubleLightsaberRedItem;
 public class DoubleLightsaberRedItemModel extends GeoModel<DoubleLightsaberRedItem> {
 	@Override
 	public ResourceLocation getAnimationResource(DoubleLightsaberRedItem animatable) {
-		return new ResourceLocation("star_wars_expansion", "animations/doublelightsaber.animation.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "animations/doublelightsaber.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(DoubleLightsaberRedItem animatable) {
-		return new ResourceLocation("star_wars_expansion", "geo/doublelightsaber.geo.json");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "geo/doublelightsaber.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(DoubleLightsaberRedItem animatable) {
-		return new ResourceLocation("star_wars_expansion", "textures/item/lightsaber_red.png");
+		return ResourceLocation.fromNamespaceAndPath("star_wars_expansion", "textures/item/lightsaber_red.png");
 	}
 }
